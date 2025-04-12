@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
-
 import { CreateUserDto, UpdateUserDto } from '../dto';
 import { UserEntity } from '../entities/user.entity';
 import { QueryDto } from 'src/common/dto/query.dto';
@@ -16,6 +15,8 @@ import { handlerError } from 'src/common/utils/handlerError.utils';
 import { ResponseMessage, ResponseGet } from 'src/common/interfaces';
 import { RoleService } from './role.service';
 import { ROLE } from 'src/users/constants/role.constant';
+
+
 
 @Injectable()
 export class UserService {

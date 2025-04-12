@@ -15,6 +15,8 @@ import { PermissionController } from './controllers/permission.controller';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 
+
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([

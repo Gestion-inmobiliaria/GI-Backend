@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, MaxLength, MinLength } from 'class-validator';
 import { GENDER } from 'src/common/constants/gender';
 
+
+
 export class CreateUserDto {
   @ApiProperty({
     example: 11223344,

@@ -3,6 +3,8 @@ import { UserEntity } from "src/users/entities/user.entity";
 import { Column, Entity, OneToMany } from "typeorm";
 import { PermissionRoleEntity } from "./permission-role.entity";
 
+
+
 @Entity({ name: 'role' })
 export class RoleEntity extends BaseEntity {
 

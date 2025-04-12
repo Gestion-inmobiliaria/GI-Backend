@@ -5,6 +5,8 @@ import { GENDER } from 'src/common/constants/gender';
 import { Exclude } from 'class-transformer';
 import { RoleEntity } from './role.entity';
 
+
+
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUser {
   @Column({ type: 'int', unique: true, nullable: false })
