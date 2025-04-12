@@ -11,6 +11,7 @@ import { CORS_OPTIONS } from './common/constants';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  
   app.use(morgan('dev'));
   app.setGlobalPrefix('api');
   app.enableCors(CORS_OPTIONS);
@@ -41,7 +42,8 @@ async function bootstrap() {
     SwaggerModule.setup('docs', app, document);
   // }
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
+
   console.log(`Application is running on: ${url}`);
 }
 bootstrap();

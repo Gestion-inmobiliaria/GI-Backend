@@ -17,7 +17,8 @@ import { CreateExampleDto } from '../dto/create-example.dto';
 import { QueryDto } from 'src/common/dto/query.dto';
 import { UpdateExampleDto } from '../dto/update-example.dto';
 import { ORDER_ENUM } from 'src/common/constants';
-import { ResponseMessage } from 'src/common/interfaces/responseMessage.interface';
+import { ResponseMessage } from 'src/common/interfaces/response-message.interface';
+
 
 @ApiTags('Example')
 @ApiBearerAuth()

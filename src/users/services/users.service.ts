@@ -51,7 +51,7 @@ export class UserService {
       query.leftJoinAndSelect('user.role', 'role');
       query.leftJoinAndSelect('role.permissions', 'permissions');
       query.leftJoinAndSelect('permissions.permission', 'permission');
-      query.leftJoinAndSelect('user.branch', 'branch');
+    //  query.leftJoinAndSelect('user.branch', 'branch');
       query.andWhere('role.name != :role', { role: ROLE.ADMIN_SU });
       if (limit) query.take(limit);
       if (offset) query.skip(offset);
@@ -76,7 +76,7 @@ export class UserService {
           'role',
           'role.permissions',
           'role.permissions.permission',
-          'branch',
+          //'branch',
         ],
       });
       if (!user) throw new NotFoundException('Usuario no encontrado.');
@@ -100,7 +100,7 @@ export class UserService {
           'role',
           'role.permissions',
           'role.permissions.permission',
-          'branch',
+        //  'branch',
         ],
       });
       if (!user) throw new NotFoundException('Usuario no encontrado.');
@@ -118,7 +118,7 @@ export class UserService {
           'role',
           'role.permissions',
           'role.permissions.permission',
-          'branch',
+         // 'branch',
         ],
       });
       if (!user) throw new UnauthorizedException('User not found.');

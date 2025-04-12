@@ -4,7 +4,7 @@ import { IAuth } from '../interfaces/auth.interface';
 
 export class AuthDTO implements IAuth {
   @ApiProperty({
-    example: 'adminTI@gmail.com',
+    example: 'admin@correo.com',
     type: String,
     description: 'Correo electrónico',
   })
@@ -13,7 +13,7 @@ export class AuthDTO implements IAuth {
   email: string;
 
   @ApiProperty({
-    example: '12345678',
+    example: 'admin123',
     type: String,
     description: 'Contraseña del usuario',
   })
