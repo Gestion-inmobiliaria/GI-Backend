@@ -110,6 +110,13 @@ export class UserService {
     }
   }
 
+  async existsBy(key: keyof CreateUserDto, value: any): Promise<boolean> {
+    const user = await this.userRepository.findOne({
+      where: { [key]: value, isActive: true },
+    });
+    return !!user;
+  }
+
   public async findOneAuth(id: string): Promise<UserEntity> {
     try {
       const user: UserEntity = await this.userRepository.findOne({

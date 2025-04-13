@@ -31,6 +31,7 @@
     "db:delete:test": "npm run db:drop:test && npm run db:sync:test"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.6.0",
     "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^11.0.13",
     "@nestjs/config": "^4.0.2",

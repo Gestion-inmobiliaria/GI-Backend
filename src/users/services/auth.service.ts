@@ -5,7 +5,7 @@
 // - Verificación de tokens para validar sesiones activas.
 
 // Importación de decoradores y módulos necesarios de NestJS
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config'; // Servicio para acceder a variables de configuración
 
 // Importación de librerías externas
@@ -20,6 +20,7 @@ import { IGenerateToken } from '../interfaces/generate-token.interface'; // Inte
 import { IUserToken } from '../interfaces/userToken.interface'; // Interfaz para representar un token de usuario
 import { userToken } from '../utils/user-token.utils'; // Utilidad para decodificar y validar tokens
 import { handlerError } from 'src/common/utils/handlerError.utils'; // Utilidad para manejar errores
+import { CreateUserDto } from '../dto';
 
 // Decorador que marca esta clase como un servicio inyectable
 @Injectable()
@@ -31,7 +32,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService, // Servicio para manejar usuarios
     private readonly configService: ConfigService, // Servicio para acceder a variables de configuración
-  ) {}
+  ) { }
 
   // Método para manejar el inicio de sesión
   public async login(email: string, password: string): Promise<any> {
@@ -54,6 +55,36 @@ export class AuthService {
       handlerError(error, this.logger);
     }
   }
+
+  async registerUser(dto: CreateUserDto) {
+    const CLIENT_ROLE_ID = '6122fa96-0640-46fc-80cc-eba2e3179c15'; // UUID real del rol Cliente
+
+    if (dto.role && dto.role !== CLIENT_ROLE_ID) {
+      throw new ForbiddenException('No tienes permiso para asignar ese rol.');
+    }
+
+    // 🔍 Validar si ya existe un usuario con el mismo CI
+    const existingCI = await this.userService.existsBy('ci', dto.ci);
+    if (existingCI) {
+      throw new ForbiddenException('El CI ya está registrado');
+    }
+
+    // Validar email duplicado
+    const existingEmail = await this.userService.existsBy('email', dto.email);
+    if (existingEmail) {
+      throw new ForbiddenException('El correo electrónico ya está registrado');
+    }
+
+    // Crear nuevo usuario
+    const newUser = await this.userService.create({
+      ...dto,
+      role: CLIENT_ROLE_ID,
+    });
+
+    return { message: 'Usuario creado exitosamente', userId: newUser.id };
+  }
+
+
 
   // Método para verificar la validez de un token
   public async checkToken(token: string): Promise<UserEntity> {

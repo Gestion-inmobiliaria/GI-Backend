@@ -66,7 +66,7 @@ export class CreateUserDto {
     type: String,
     description: 'Id del rol del usuario',
   })
-  @IsNotEmpty() @IsString() @IsUUID()
+  @IsOptional() @IsString() @IsUUID()
   role: string;
 
 

@@ -1,11 +1,12 @@
 // Importación de decoradores y módulos necesarios de NestJS
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger/dist/decorators';
-
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 // Importación de DTOs, servicios y tipos personalizados
 import { AuthDTO } from '../dto/auth.dto'; // DTO para manejar los datos de autenticación
 import { AuthService } from '../services/auth.service'; // Servicio que contiene la lógica de autenticación
 import { ResponseMessage } from '../../common/interfaces'; // Interfaz para estructurar las respuestas
+import { RegisterUserDto } from 'src/users/dto/register-user.dto';
 
 // Decorador para agrupar las rutas bajo la etiqueta 'Auth' en Swagger
 @ApiTags('Auth')
@@ -39,6 +40,11 @@ export class AuthController {
       statusCode: 200, // Código de estado HTTP
       data: await this.authService.checkToken(token) // Respuesta del servicio
     };
+  }
+
+  @Post('register')
+  async register(@Body() dto: RegisterUserDto) {
+    return this.authService.registerUser(dto);
   }
 
   // Comentarios de código para futuras implementaciones de rutas relacionadas con contraseñas

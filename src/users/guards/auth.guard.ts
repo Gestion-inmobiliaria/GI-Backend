@@ -23,43 +23,38 @@ export class AuthGuard implements CanActivate {
 
   // Método principal del guard que determina si se permite el acceso
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    // 🔍 Verifica si el endpoint está marcado como público
+    const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+    if (isPublic) return true;
+  
     try {
-      // Obtiene la solicitud HTTP del contexto de ejecución
       const request = context.switchToHttp().getRequest<Request>();
-
-      // Extrae el token de autorización del encabezado
       const token = request.headers.authorization?.split(' ')[1];
       if (!token || Array.isArray(token)) {
-        // Lanza una excepción si no se encuentra el token o es inválido
         throw new UnauthorizedException('Token no encontrado');
       }
-
-      // Decodifica y valida el token utilizando la utilidad `userToken`
+  
       const managerToken: IUserToken | string = userToken(token);
       if (typeof managerToken === 'string') {
-        // Si la utilidad devuelve un mensaje de error, lanza una excepción
         throw new UnauthorizedException(managerToken);
       }
       if (managerToken.isExpired) {
-        // Lanza una excepción si el token ha expirado
         throw new UnauthorizedException('Token expirado');
       }
-
-      // Busca al usuario en la base de datos utilizando el ID del token
+  
       const user = await this.userService.findOneAuth(managerToken.sub);
-
-      // Agrega información del usuario a la solicitud para su uso posterior
-      request.userId = user.id; // ID del usuario autenticado
-      request.roleId = user.role.id; // ID del rol del usuario
-
-      // Si todo es válido, permite el acceso
+  
+      request.userId = user.id;
+      request.roleId = user.role.id;
+  
       return true;
     } catch (error) {
-      // Si ocurre una excepción de autenticación, la lanza directamente
       if (error instanceof UnauthorizedException) throw error;
-
-      // Si ocurre cualquier otro error, lanza una excepción interna del servidor
       throw new InternalServerErrorException('Error al validar el token');
     }
   }
+  
 }

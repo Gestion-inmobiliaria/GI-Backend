@@ -13,7 +13,7 @@ import { UsersModule } from '../users/users.module';
             ClientEntity
         ]),
         ConfigModule,
-        UsersModule, // ✅ añade esto
+        UsersModule, 
     ],
     controllers: [ClientsController],
     providers: [ClientsService],

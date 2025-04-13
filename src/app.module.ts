@@ -6,6 +6,7 @@ import { ProvidersModule } from './providers/providers.module';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { ClientsModule } from './clients/clients.module';
+import { InmobiliariaModule } from './inmobiliarias/inmobiliaria.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
@@ -14,6 +15,7 @@ import { ClientsModule } from './clients/clients.module';
     CommonModule,      
     UsersModule,
     ClientsModule,
+    InmobiliariaModule,
   ]
 })
 export class AppModule { }
