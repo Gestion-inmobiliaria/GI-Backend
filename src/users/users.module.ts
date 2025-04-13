@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserService } from './services/users.service';
 import { UsersController } from './controllers/users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,6 +14,7 @@ import { RoleController } from './controllers/role.controller';
 import { PermissionController } from './controllers/permission.controller';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
+import { BranchesModule } from 'src/branches/branches.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthService } from './services/auth.service';
       UserEntity,
     ]),
     ConfigModule,
+    forwardRef(() => BranchesModule),
   ],
   controllers: [
     AuthController,

@@ -1,4 +1,5 @@
 import { GENDER } from "src/common/constants/gender";
+import { IBranch } from "src/branches/interfaces/branch.interface";
 
 export interface IUser {
   ci: number;
@@ -9,4 +10,5 @@ export interface IUser {
   gender: GENDER;
   address?: string;
   isActive: boolean;
+  branch?: IBranch;
 }

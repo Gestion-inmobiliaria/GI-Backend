@@ -16,6 +16,7 @@ import { handlerError } from 'src/common/utils/handlerError.utils';
 import { ResponseMessage, ResponseGet } from 'src/common/interfaces';
 import { RoleService } from './role.service';
 import { ROLE } from 'src/users/constants/role.constant';
+import { BranchService } from 'src/branches/services/branch.service';
 
 @Injectable()
 export class UserService {
@@ -25,19 +26,35 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly roleService: RoleService,
+    private readonly branchService: BranchService,
   ) {}
 
   public async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     try {
-      const { password, role, ...user } = createUserDto;
+      const { password, role, branch, ...user } = createUserDto;
       const passwordEncrypted = await this.encryptPassword(password);
       const roleFound = await this.roleService.exists(role);
-      const userCreate = this.userRepository.create({
+      
+      const userCreate: any = {
         ...user,
         password: passwordEncrypted,
         role: roleFound,
-      });     
-      const userCreated = await this.userRepository.save(userCreate);
+      };
+      
+      if (branch) {
+        const branchFound = await this.branchService.findOne(branch);
+        userCreate.branch = branchFound;
+      }
+      
+      const newUser = this.userRepository.create(userCreate);
+      const result = await this.userRepository.save(newUser);
+      
+      // TypeORM a veces devuelve un array, así que aseguramos tener un objeto
+      const userCreated = Array.isArray(result) ? result[0] : result;
+      if (!userCreated || !userCreated.id) {
+        throw new BadRequestException('Error al crear el usuario');
+      }
+      
       return await this.findOne(userCreated.id);
     } catch (error) {
       handlerError(error, this.logger);
@@ -49,6 +66,7 @@ export class UserService {
       const { limit, offset, order, attr, value } = queryDto;
       const query = this.userRepository.createQueryBuilder('user');
       query.leftJoinAndSelect('user.role', 'role');
+      query.leftJoinAndSelect('user.branch', 'branch');
       query.leftJoinAndSelect('role.permissions', 'permissions');
       query.leftJoinAndSelect('permissions.permission', 'permission');      
       query.andWhere('role.name != :role', { role: ROLE.ADMIN_SU });
@@ -73,6 +91,7 @@ export class UserService {
         where: { id },
         relations: [
           'role',
+          'branch',
           'role.permissions',
           'role.permissions.permission',          
         ],
@@ -96,6 +115,7 @@ export class UserService {
         where: { [key]: value, isActive: true },
         relations: [
           'role',
+          'branch',
           'role.permissions',
           'role.permissions.permission',          
         ],
@@ -113,6 +133,7 @@ export class UserService {
         where: { id, isActive: true },
         relations: [
           'role',
+          'branch',
           'role.permissions',
           'role.permissions.permission',          
         ],
@@ -129,23 +150,33 @@ export class UserService {
     updateUserDto: UpdateUserDto,
   ): Promise<UserEntity> {
     try {
-      const { role, password, ...userRest } = updateUserDto;
+      const { role, password, branch, ...userRest } = updateUserDto;
       const user: UserEntity = await this.findOne(id);
       let dataUserUpdated: Partial<UserEntity> = { ...userRest };
+      
       if (password) {
         const passwordEncrypted = await this.encryptPassword(password);
         dataUserUpdated = { ...dataUserUpdated, password: passwordEncrypted };
       }
+      
       if (role) {
         const roleFound = await this.roleService.findOne(role);
         dataUserUpdated = { ...dataUserUpdated, role: roleFound };
-      }     
+      }
+      
+      if (branch) {
+        const branchFound = await this.branchService.findOne(branch);
+        dataUserUpdated = { ...dataUserUpdated, branch: branchFound };
+      }
+      
       const userUpdated = await this.userRepository.update(
         user.id,
         dataUserUpdated,
       );
+      
       if (userUpdated.affected === 0)
         throw new BadRequestException('Usuario no actualizado');
+      
       return await this.findOne(id);
     } catch (error) {
       handlerError(error, this.logger);

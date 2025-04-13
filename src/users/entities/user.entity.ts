@@ -4,6 +4,7 @@ import { IUser } from '../interfaces/user.interface';
 import { GENDER } from 'src/common/constants/gender';
 import { Exclude } from 'class-transformer';
 import { RoleEntity } from './role.entity';
+import { BranchEntity } from 'src/branches/entities/branch.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUser {
@@ -33,4 +34,7 @@ export class UserEntity extends BaseEntity implements IUser {
 
   @ManyToOne(() => RoleEntity, (role) => role.users, { onDelete: 'CASCADE' })
   role: RoleEntity;  
+  
+  @ManyToOne(() => BranchEntity, (branch) => branch.users, { nullable: true })
+  branch: BranchEntity;
 }

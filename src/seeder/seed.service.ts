@@ -66,6 +66,19 @@ export class SeedService {
             type: PermissionType.USERS,
         });
 
+        // Añadir permisos de sucursales
+        const branch = await this.permissionService.create({
+            name: PERMISSION.BRANCH,
+            description: 'permite gestionar sucursales',
+            type: PermissionType.BRANCH,
+        });
+        
+        const branchShow = await this.permissionService.create({
+            name: PERMISSION.BRANCH_SHOW,
+            description: 'permite ver sucursales',
+            type: PermissionType.BRANCH,
+        });
+
         const permissionTI = [
             users.id,
             usersShow.id,
@@ -73,6 +86,8 @@ export class SeedService {
             rolesShow.id,
             permissions.id,
             permissionsShow.id,
+            branch.id,     // Añadir permisos de sucursales
+            branchShow.id, // Añadir permisos de sucursales
         ];
         
         this.administradorSU = await this.roleService.create({

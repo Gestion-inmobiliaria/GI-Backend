@@ -8,6 +8,7 @@ export enum PermissionType {
   BUY = 'Compras',
   USERS = 'Usuarios',
   COMPANY = 'Empresa',
+  BRANCH = 'Sucursales'
 }
 
 @Entity({ name: 'permission' })

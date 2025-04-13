@@ -7,6 +7,7 @@ import { ProvidersModule } from './providers/providers.module';
 import { CommonModule } from './common/common.module';
 import { SeederModule } from './seeder/seed.module';
 import { UsersModule } from './users/users.module';
+import { BranchesModule } from './branches/branches.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersModule } from './users/users.module';
     CommonModule,      
     
     UsersModule,
+    BranchesModule,
     SeederModule,
   ]
 })
