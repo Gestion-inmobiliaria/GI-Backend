@@ -33,16 +33,19 @@ export class AuthController {
     @Get('google')
     @UseGuards(AuthGuard('google'))
     async googleAuth() {
-        // Este endpoint redirige al usuario a la página de inicio de sesión de Google
+        // ejte endpoint redirige al usuario a la página de inicio de sesión de Google
     }
 
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
-    async googleAuthRedirect(@Req() req) {
-        // Aquí se maneja la redirección después de la autenticación
+    async googleAuthRedirect(@Req() req): Promise<ResponseMessage> {
+        const googleUser = req.user; // peji autenticado por gúgle
+        const user = await this.authService.handleGoogleUser(googleUser); // manejar al usuario autenticado
+        const token = await this.authService.generateJWT(user); // generar el jwt
         return {
+            statusCode: 200,
             message: 'Usuario autenticado con Google',
-            user: req.user,
+            data: { token, user },
         };
     }
 
