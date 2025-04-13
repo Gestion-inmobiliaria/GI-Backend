@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { IUser } from '../interfaces/user.interface';
 import { GENDER } from 'src/common/constants/gender';
 import { Exclude } from 'class-transformer';
@@ -22,9 +22,6 @@ export class UserEntity extends BaseEntity implements IUser {
 
   @Column({ type: 'varchar', nullable: true, length: 15 })
   phone: string;
-
-  @Column({ type: 'varchar', nullable: true, length: 100 })
-  address: string;
 
   @Column({
     type: 'enum', enum: GENDER, nullable: false, default: GENDER.OTHER

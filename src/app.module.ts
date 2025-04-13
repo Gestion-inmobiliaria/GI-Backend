@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSourceConfig } from './config/data.source';
 import { ProvidersModule } from './providers/providers.module';
 import { CommonModule } from './common/common.module';
+import { SeederModule } from './seeder/seed.module';
 import { UsersModule } from './users/users.module';
 import { ClientsModule } from './clients/clients.module';
 import { InmobiliariaModule } from './inmobiliarias/inmobiliaria.module';
@@ -16,6 +17,7 @@ import { InmobiliariaModule } from './inmobiliarias/inmobiliaria.module';
     UsersModule,
     ClientsModule,
     InmobiliariaModule,
+    SeederModule,
   ]
 })
 export class AppModule { }
