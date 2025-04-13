@@ -8,4 +8,7 @@ export enum PERMISSION {
   ROLE_SHOW = 'Mostrar roles',
   PERMISSION = 'Permiso',
   PERMISSION_SHOW = 'Mostrar permisos',
+  // branch
+  BRANCH = 'Sucursal',
+  BRANCH_SHOW = 'Mostrar sucursales',
 }

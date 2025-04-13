@@ -60,4 +60,13 @@ export class CreateUserDto {
   })
   @IsNotEmpty() @IsString() @IsUUID()
   role: string;
+  
+  @ApiProperty({
+    example: 'ID',
+    type: String,
+    description: 'Id de la sucursal del usuario',
+    required: false,
+  })
+  @IsOptional() @IsString() @IsUUID()
+  branch?: string;
 }
