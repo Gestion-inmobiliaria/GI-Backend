@@ -16,6 +16,8 @@ import { handlerError } from 'src/common/utils/handlerError.utils';
 import { ResponseMessage, ResponseGet } from 'src/common/interfaces';
 import { RoleService } from './role.service';
 import { ROLE } from 'src/users/constants/role.constant';
+import { SectorsService } from '@/sectors/sectors.service';
+import { BranchService } from 'src/branches/services/branch.service';
 
 @Injectable()
 export class UserService {
@@ -25,32 +27,59 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly roleService: RoleService,
-  ) {}
+    private readonly sectorService: SectorsService,
+    private readonly branchService: BranchService
+  ) { }
 
   public async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     try {
-      const { password, role, ...user } = createUserDto;
+      const { password, role, branch, ...user } = createUserDto;
       const passwordEncrypted = await this.encryptPassword(password);
       const roleFound = await this.roleService.exists(role);
+      const sectorFound = await this.sectorService.findOne(createUserDto.sector);
       const userCreate = this.userRepository.create({
         ...user,
         password: passwordEncrypted,
         role: roleFound,
-      });     
+        sector: createUserDto.sector ? sectorFound : null,
+      });
+      if (branch) {
+        const branchFound = await this.branchService.findOne(branch);
+        userCreate.branch = branchFound;
+      }
       const userCreated = await this.userRepository.save(userCreate);
+      
+      
+      // const newUser = this.userRepository.create(userCreate);
+      // const result = await this.userRepository.save(newUser);
+      
+      // // TypeORM a veces devuelve un array, así que aseguramos tener un objeto
+      // const userCreated = Array.isArray(result) ? result[0] : result;
+      // if (!userCreated || !userCreated.id) {
+      //   throw new BadRequestException('Error al crear el usuario');
+      // }
+      
+
       return await this.findOne(userCreated.id);
     } catch (error) {
       handlerError(error, this.logger);
     }
   }
 
-  public async findAll(queryDto: QueryDto): Promise<ResponseGet> {
+  public async findAll(queryDto: QueryDto, userId?: string): Promise<ResponseGet> {
     try {
-      const { limit, offset, order, attr, value } = queryDto;
+      const { limit, offset, order, attr, value } = queryDto;          
       const query = this.userRepository.createQueryBuilder('user');
       query.leftJoinAndSelect('user.role', 'role');
+      query.leftJoinAndSelect('user.branch', 'branch');
       query.leftJoinAndSelect('role.permissions', 'permissions');
-      query.leftJoinAndSelect('permissions.permission', 'permission');      
+      query.leftJoinAndSelect('permissions.permission', 'permission');
+      if (userId) {
+        const findUser = await this.findOne(userId);  
+        query.leftJoinAndSelect('user.sector', 'sector');
+        query.leftJoinAndSelect('sector.realState', 'realState');
+        query.andWhere('realState.id = :realStateId', { realStateId: findUser.sector.realState.id });
+      }
       query.andWhere('role.name != :role', { role: ROLE.ADMIN_SU });
       if (limit) query.take(limit);
       if (offset) query.skip(offset);
@@ -73,8 +102,11 @@ export class UserService {
         where: { id },
         relations: [
           'role',
+          'branch',
           'role.permissions',
-          'role.permissions.permission',          
+          'role.permissions.permission',
+          'sector',
+          'sector.realState',
         ],
       });
       if (!user) throw new NotFoundException('Usuario no encontrado.');
@@ -96,8 +128,9 @@ export class UserService {
         where: { [key]: value, isActive: true },
         relations: [
           'role',
+          'branch',
           'role.permissions',
-          'role.permissions.permission',          
+          'role.permissions.permission',
         ],
       });
       if (!user) throw new NotFoundException('Usuario no encontrado.');
@@ -113,8 +146,11 @@ export class UserService {
         where: { id, isActive: true },
         relations: [
           'role',
+          'branch',
           'role.permissions',
-          'role.permissions.permission',          
+          'role.permissions.permission',
+          'sector',
+          'sector.realState'
         ],
       });
       if (!user) throw new UnauthorizedException('User not found.');
@@ -129,23 +165,37 @@ export class UserService {
     updateUserDto: UpdateUserDto,
   ): Promise<UserEntity> {
     try {
-      const { role, password, ...userRest } = updateUserDto;
+      const { role, password, sector, branch, ...userRest } = updateUserDto;
       const user: UserEntity = await this.findOne(id);
       let dataUserUpdated: Partial<UserEntity> = { ...userRest };
+      
       if (password) {
         const passwordEncrypted = await this.encryptPassword(password);
         dataUserUpdated = { ...dataUserUpdated, password: passwordEncrypted };
       }
+      
       if (role) {
         const roleFound = await this.roleService.findOne(role);
         dataUserUpdated = { ...dataUserUpdated, role: roleFound };
-      }     
+      }
+      if (sector) {
+        const sectorFound = await this.sectorService.findOne(sector);
+        dataUserUpdated = { ...dataUserUpdated, sector: sectorFound };
+      }
+      
+      if (branch) {
+        const branchFound = await this.branchService.findOne(branch);
+        dataUserUpdated = { ...dataUserUpdated, branch: branchFound };
+      }
+
       const userUpdated = await this.userRepository.update(
         user.id,
         dataUserUpdated,
       );
+      
       if (userUpdated.affected === 0)
         throw new BadRequestException('Usuario no actualizado');
+      
       return await this.findOne(id);
     } catch (error) {
       handlerError(error, this.logger);
@@ -190,5 +240,13 @@ export class UserService {
 
   public async encryptPassword(password: string): Promise<string> {
     return bcrypt.hashSync(password, +process.env.HASH_SALT);
+  }
+
+  public async clear(): Promise<void> {
+    try {
+      await this.userRepository.clear();
+    } catch (error) {
+      handlerError(error, this.logger);
+    }
   }
 }

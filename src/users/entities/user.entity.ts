@@ -4,6 +4,8 @@ import { IUser } from '../interfaces/user.interface';
 import { GENDER } from 'src/common/constants/gender';
 import { Exclude } from 'class-transformer';
 import { RoleEntity } from './role.entity';
+import { SectorEntity } from '@/sectors/entities/sector.entity';
+import { BranchEntity } from 'src/branches/entities/branch.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUser {
@@ -24,7 +26,7 @@ export class UserEntity extends BaseEntity implements IUser {
   phone: string;
 
   @Column({
-    type: 'enum', enum: GENDER, nullable: false, default: GENDER.OTHER
+    type: 'enum', enum: GENDER, nullable: true, default: GENDER.OTHER
   })
   gender: GENDER;
 
@@ -32,5 +34,11 @@ export class UserEntity extends BaseEntity implements IUser {
   isActive: boolean;
 
   @ManyToOne(() => RoleEntity, (role) => role.users, { onDelete: 'CASCADE' })
-  role: RoleEntity;  
+  role: RoleEntity;
+
+  @ManyToOne(() => SectorEntity, (sector) => sector.users, { onDelete: 'CASCADE', nullable: true })
+  sector?: SectorEntity
+
+  @ManyToOne(() => BranchEntity, (branch) => branch.users, { nullable: true })
+  branch: BranchEntity;
 }

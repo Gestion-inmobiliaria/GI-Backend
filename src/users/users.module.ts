@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+
+import { forwardRef, Module, Global } from '@nestjs/common';
 import { UserService } from './services/users.service';
 import { UsersController } from './controllers/users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,7 +15,11 @@ import { RoleController } from './controllers/role.controller';
 import { PermissionController } from './controllers/permission.controller';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
+import { RealstateModule } from '@/realstate/realstate.module';
+import { SectorsModule } from '@/sectors/sectors.module';
+import { BranchesModule } from 'src/branches/branches.module';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -23,7 +28,10 @@ import { AuthService } from './services/auth.service';
       RoleEntity,
       UserEntity,
     ]),
+    RealstateModule,
+    SectorsModule,
     ConfigModule,
+    forwardRef(() => BranchesModule),
   ],
   controllers: [
     AuthController,

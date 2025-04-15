@@ -1,7 +1,8 @@
-import { createParamDecorator, ExecutionContext, InternalServerErrorException } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext, InternalServerErrorException, Logger } from '@nestjs/common';
 
 export const GetUser = createParamDecorator(
   (data: string, ctx: ExecutionContext) => {
+    Logger.log({ data });
     const req = ctx.switchToHttp().getRequest();
     const user = req.userId;
     if (!user)

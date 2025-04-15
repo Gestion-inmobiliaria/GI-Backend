@@ -73,8 +73,9 @@ export class RoleService {
   public async findAll(queryDto: QueryDto): Promise<ResponseGet> {
     try {
       const { limit, attr, value, offset, order = ORDER_ENUM.DESC } = queryDto;
-      const query = this.roleRepository.createQueryBuilder('role');
-      query.where('role.name != :role', { role: ROLE.ADMIN_SU });
+      const query = this.roleRepository.createQueryBuilder('role');      
+      query.where('role.name != :role', { role: ROLE.ADMIN_SU })
+        .andWhere('role.name != :role2', { role2: 'basic' });
       if (attr && value)
         query.andWhere(`role.${attr} LIKE :value`, { value: `%${value}%` });
       if (limit) query.take(limit);
@@ -100,6 +101,14 @@ export class RoleService {
     }
   }
 
+  public async findOneBy({ key, value }: { key: keyof CreateRoleDto; value: any }) {
+    try {
+      return await this.roleRepository.findOne({ where: { [key]: value } });
+    } catch (error) {
+      handlerError(error, this.logger);
+    }
+  }
+
   public async update(
     id: string,
     updateRoleDto: UpdateRoleDto,
@@ -107,7 +116,7 @@ export class RoleService {
     try {
       const role = await this.roleRepository.findOne({ where: { id } });
       if (!role) throw new NotFoundException('Role not found');
-      if (role.name === ROLE.ADMIN_SU || role.name === ROLE.ADMIN)
+      if (role.name === ROLE.ADMIN_SU || role.name === ROLE.ADMIN || role.name === 'basic')
         throw new ConflictException('El rol no puede ser modificado');
       const { name, permissions } = updateRoleDto;
 
@@ -154,6 +163,18 @@ export class RoleService {
     }
   }
 
+  public async findOneByName(name: string): Promise<RoleEntity> {
+    try {
+      const role = await this.roleRepository.findOne({ where: { name } });
+      if (!role) {
+        throw new NotFoundException(`El rol "${name}" no existe`);
+      }
+      return role;
+    } catch (error) {
+      handlerError(error, this.logger);
+    }
+  }
+
   public async remove(id: string): Promise<ResponseMessage> {
     try {
       const role = await this.roleRepository.findOne({
@@ -178,6 +199,14 @@ export class RoleService {
         message: 'Rol eliminado correctamente.',
         statusCode: 200,
       };
+    } catch (error) {
+      handlerError(error, this.logger);
+    }
+  }
+
+  public async clear(): Promise<void> {
+    try {
+      await this.roleRepository.clear();
     } catch (error) {
       handlerError(error, this.logger);
     }

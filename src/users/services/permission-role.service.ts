@@ -56,4 +56,12 @@ export class PermissionRoleService {
       handlerError(error, this.logger);
     }
   }
+
+  public async clear(): Promise<void> {
+    try {
+      await this.permissionRoleRepository.clear();
+    } catch (error) {
+      handlerError(error, this.logger);
+    }
+  }
 }
