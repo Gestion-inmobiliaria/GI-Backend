@@ -73,8 +73,9 @@ export class RoleService {
   public async findAll(queryDto: QueryDto): Promise<ResponseGet> {
     try {
       const { limit, attr, value, offset, order = ORDER_ENUM.DESC } = queryDto;
-      const query = this.roleRepository.createQueryBuilder('role');
-      query.where('role.name != :role', { role: ROLE.ADMIN_SU });
+      const query = this.roleRepository.createQueryBuilder('role');      
+      query.where('role.name != :role', { role: ROLE.ADMIN_SU })
+        .andWhere('role.name != :role2', { role2: 'basic' });
       if (attr && value)
         query.andWhere(`role.${attr} LIKE :value`, { value: `%${value}%` });
       if (limit) query.take(limit);
@@ -115,7 +116,7 @@ export class RoleService {
     try {
       const role = await this.roleRepository.findOne({ where: { id } });
       if (!role) throw new NotFoundException('Role not found');
-      if (role.name === ROLE.ADMIN_SU || role.name === ROLE.ADMIN)
+      if (role.name === ROLE.ADMIN_SU || role.name === ROLE.ADMIN || role.name === 'basic')
         throw new ConflictException('El rol no puede ser modificado');
       const { name, permissions } = updateRoleDto;
 

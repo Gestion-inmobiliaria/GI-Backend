@@ -9,7 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { QueryDto } from 'src/common/dto/query.dto';
 import { handlerError } from 'src/common/utils/handlerError.utils';
 import { ResponseGet, ResponseMessage } from 'src/common/interfaces';
-import { PlanInterval } from '../entities/Plan.entity';
+import { PlanInterval } from '../entities/plan.entity';
 import { UpdatePlanDto } from '../dto/plan.dto';
 import { SubscriptionEntity, SubscriptionState } from '../entities/subscription.entity';
 import { UserService } from '@/users/services/users.service';

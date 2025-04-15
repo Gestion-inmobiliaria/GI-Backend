@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsPositive, IsString } from 'class-validator';
-import { PlanInterval } from '../entities/Plan.entity';
+import { PlanInterval } from '../entities/plan.entity';
 import { CURRENCY } from '@/common/constants';
 
 export class CreatePlanDto {

@@ -3,11 +3,8 @@ import { Column } from 'typeorm/decorator/columns/Column';
 import { BaseEntity } from '../../common/entities/base.entity';
 
 export enum PermissionType {
-  INVENTORY = 'Iventario',
-  SALES = 'Ventas',
-  BUY = 'Compras',
   USERS = 'Usuarios',
-  COMPANY = 'Empresa',
+  REALSTATE = 'Inmobiliarias',
 }
 
 @Entity({ name: 'permission' })

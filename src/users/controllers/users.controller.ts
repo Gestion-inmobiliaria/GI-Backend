@@ -20,6 +20,7 @@ import { PermissionGuard } from '../guards/permission.guard';
 import { PermissionAccess } from '../decorators/permissions.decorator';
 import { PERMISSION } from 'src/users/constants/permission.constant';
 import { ORDER_ENUM } from 'src/common/constants';
+import { GetUser } from '../decorators/get-user.decorator';
 
 @ApiTags('Users')
 @UseGuards(AuthGuard, PermissionGuard)
@@ -45,14 +46,17 @@ export class UsersController {
   @ApiQuery({ name: 'attr', type: 'string', required: false })
   @ApiQuery({ name: 'value', type: 'string', required: false })
   @Get()
-  public async findAll(@Query() queryDto: QueryDto): Promise<ResponseMessage> {
-    const { countData, data } = await this.userService.findAll(queryDto);
-    return {
-      statusCode: 200,
-      data,
-      countData,
-    };
-  }
+  public async findAll(
+    @Query() queryDto: QueryDto,
+      @GetUser('userId') userId: string
+    ): Promise<ResponseMessage> {
+        const { countData, data } = await this.userService.findAll(queryDto, userId);
+        return {
+          statusCode: 200,
+          data,
+          countData,
+        };
+      }
 
   @PermissionAccess(PERMISSION.USER, PERMISSION.USER_SHOW)
   @ApiParam({ name: 'userId', type: 'string' })

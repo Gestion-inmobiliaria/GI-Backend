@@ -26,4 +26,6 @@ export enum PERMISSION {
   SECTOR_CREATE = 'Crear sectores',
   SECTOR_UPDATE = 'Actualizar sectores',
   SECTOR_DELETE = 'Eliminar sectores',
+
+  SUBSCRIPTION = 'Suscripcion',
 }

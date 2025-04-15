@@ -1,7 +1,7 @@
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import { RealStateEntity } from './realstate.entity';
-import { PlanEntity } from './Plan.entity';
+import { PlanEntity } from './plan.entity';
 import { SubscriptionPaymentEntity } from './subscription_payment.entity';
 
 export enum SubscriptionState {

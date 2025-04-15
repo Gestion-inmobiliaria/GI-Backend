@@ -8,8 +8,7 @@ import {
   Delete,
   Query,
   ParseUUIDPipe,
-  UseGuards,
-  Logger,
+  UseGuards,  
 } from '@nestjs/common';
 import { ResponseMessage } from 'src/common/interfaces';
 import { QueryDto } from 'src/common/dto/query.dto';
@@ -113,5 +112,4 @@ export class PlanController {
   ): Promise<ResponseMessage> {
     return await this.subscriptionService.getSubscriptionActive(userId, realstateId)
   }
-
 }

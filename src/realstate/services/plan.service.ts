@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { QueryDto } from 'src/common/dto/query.dto';
 import { handlerError } from 'src/common/utils/handlerError.utils';
 import { ResponseGet, ResponseMessage } from 'src/common/interfaces';
-import { PlanEntity } from '../entities/Plan.entity';
+import { PlanEntity } from '../entities/plan.entity';
 import { CreatePlanDto, UpdatePlanDto } from '../dto/plan.dto';
 
 @Injectable()

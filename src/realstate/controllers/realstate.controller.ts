@@ -11,8 +11,7 @@ import {
   UseGuards,
   Logger,
   HttpException,
-  HttpStatus,
-  Res,
+  HttpStatus,  
   Req,
 } from '@nestjs/common';
 import { ResponseMessage } from 'src/common/interfaces';
@@ -26,8 +25,7 @@ import { PermissionAccess } from 'src/users/decorators/permissions.decorator';
 import { CreateRealState, UpdateRealStateDto } from '../dto';
 import { RealStateService } from '../services/realstate.service';
 import { GetUser } from '@/users/decorators/get-user.decorator';
-import { Request, Response } from 'express';
-import axios from 'axios';
+import { Request } from 'express';
 import { SubscriptionService } from '../services/subscription.service';
 
 @ApiTags('Realstate')

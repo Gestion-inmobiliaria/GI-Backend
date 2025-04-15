@@ -11,7 +11,7 @@ import { RoleService } from "src/users/services/role.service";
 import { UserService } from "src/users/services/users.service";
 import { handlerError } from "src/common/utils";
 import { PlanService } from "@/realstate/services/plan.service";
-import { PlanInterval } from "@/realstate/entities/Plan.entity";
+import { PlanInterval } from "@/realstate/entities/plan.entity";
 import { DataSource } from "typeorm";
 import { PaymentMethodService } from "@/realstate/services/payment_method.service";
 import { PAYMENTMETHOD } from "@/realstate/entities/payment_method.entity";
@@ -127,17 +127,13 @@ export class SeedService {
             type: PermissionType.USERS,
         });
 
-        const permissionSU = [
-            users.id,
-            usersShow.id,
-            roles.id,
-            rolesShow.id,
-            permissions.id,
-            permissionsShow.id,
-            sectors.id,
-            sectorsShow.id,
-            sectorsCreate.id,
-            sectorsUpdate.id,
+        const subscription = await this.permissionService.create({
+            name: PERMISSION.SUBSCRIPTION,
+            description: 'permite gestionar suscripciones',
+            type: PermissionType.USERS,
+        });
+
+        const permissionSU = [          
             realstate.id,
             realstateShow.id,
             realstateCreate.id,
@@ -160,6 +156,7 @@ export class SeedService {
             realstateCreate.id,
             realstateUpdate.id,
             realstateDelete.id,
+            subscription.id,
         ]
 
         this.administradorSU = await this.roleService.create({
@@ -181,7 +178,7 @@ export class SeedService {
             }
             const userSU: CreateUserDto = {
                 name: 'Administrador SU',
-                email: 'adminTI@gmail.com',
+                email: 'adminSU@gmail.com',
                 password: '12345678',
                 role: this.administradorSU.id,
                 ci: 12345678,

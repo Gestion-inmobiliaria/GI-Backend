@@ -17,6 +17,8 @@ import { CreateUserDto, RegisterUserDto } from '../dto/create-user.dto';
 import { RealStateService } from '@/realstate/services/realstate.service';
 import { SectorsService } from '@/sectors/sectors.service';
 import { DataSource } from 'typeorm';
+import { PermissionService } from './permission.service';
+import { PERMISSION } from '../constants/permission.constant';
 
 @Injectable()
 export class AuthService {
@@ -29,6 +31,7 @@ export class AuthService {
     private readonly dataSources: DataSource,
     private readonly configService: ConfigService,
     private readonly roleService: RoleService,
+    private readonly permissionService: PermissionService,
   ) { }
 
   public async login(email: string, password: string): Promise<any> {
@@ -109,10 +112,13 @@ export class AuthService {
           key: 'name',
           value: 'basic',
         });
+        const findPermission = await this.permissionService.findOneByName(
+          PERMISSION.SUBSCRIPTION
+        )
         if (!findRole) {
           const role = await this.roleService.create({
             name: 'basic',
-            permissions: [],
+            permissions: [findPermission.id],
           });
           roleId = role.id;
         } else {

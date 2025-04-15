@@ -48,13 +48,19 @@ export class UserService {
     }
   }
 
-  public async findAll(queryDto: QueryDto): Promise<ResponseGet> {
+  public async findAll(queryDto: QueryDto, userId?: string): Promise<ResponseGet> {
     try {
-      const { limit, offset, order, attr, value } = queryDto;
+      const { limit, offset, order, attr, value } = queryDto;          
       const query = this.userRepository.createQueryBuilder('user');
       query.leftJoinAndSelect('user.role', 'role');
       query.leftJoinAndSelect('role.permissions', 'permissions');
       query.leftJoinAndSelect('permissions.permission', 'permission');
+      if (userId) {
+        const findUser = await this.findOne(userId);  
+        query.leftJoinAndSelect('user.sector', 'sector');
+        query.leftJoinAndSelect('sector.realState', 'realState');
+        query.andWhere('realState.id = :realStateId', { realStateId: findUser.sector.realState.id });
+      }
       query.andWhere('role.name != :role', { role: ROLE.ADMIN_SU });
       if (limit) query.take(limit);
       if (offset) query.skip(offset);

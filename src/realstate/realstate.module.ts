@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { RealStateEntity } from './entities/realstate.entity';
 import { RealStateService } from './services/realstate.service';
-import { PlanEntity } from './entities/Plan.entity';
+import { PlanEntity } from './entities/plan.entity';
 import { PaymentMethodEntity } from './entities/payment_method.entity';
 import { SubscriptionPaymentEntity } from './entities/subscription_payment.entity';
 import { SubscriptionEntity } from './entities/subscription.entity';
