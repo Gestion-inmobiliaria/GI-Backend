@@ -28,4 +28,7 @@ export enum PERMISSION {
   SECTOR_DELETE = 'Eliminar sectores',
 
   SUBSCRIPTION = 'Suscripcion',
+  // branch
+  BRANCH = 'Sucursal',
+  BRANCH_SHOW = 'Mostrar sucursales',
 }

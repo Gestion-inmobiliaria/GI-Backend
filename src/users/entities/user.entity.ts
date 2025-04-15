@@ -5,6 +5,7 @@ import { GENDER } from 'src/common/constants/gender';
 import { Exclude } from 'class-transformer';
 import { RoleEntity } from './role.entity';
 import { SectorEntity } from '@/sectors/entities/sector.entity';
+import { BranchEntity } from 'src/branches/entities/branch.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity extends BaseEntity implements IUser {
@@ -37,4 +38,7 @@ export class UserEntity extends BaseEntity implements IUser {
 
   @ManyToOne(() => SectorEntity, (sector) => sector.users, { onDelete: 'CASCADE', nullable: true })
   sector?: SectorEntity
+
+  @ManyToOne(() => BranchEntity, (branch) => branch.users, { nullable: true })
+  branch: BranchEntity;
 }

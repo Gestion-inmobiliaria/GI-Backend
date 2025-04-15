@@ -1,4 +1,5 @@
-import { Global, Module } from '@nestjs/common';
+
+import { forwardRef, Module, Global } from '@nestjs/common';
 import { UserService } from './services/users.service';
 import { UsersController } from './controllers/users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -16,6 +17,7 @@ import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { RealstateModule } from '@/realstate/realstate.module';
 import { SectorsModule } from '@/sectors/sectors.module';
+import { BranchesModule } from 'src/branches/branches.module';
 
 @Global()
 @Module({
@@ -29,6 +31,7 @@ import { SectorsModule } from '@/sectors/sectors.module';
     RealstateModule,
     SectorsModule,
     ConfigModule,
+    forwardRef(() => BranchesModule),
   ],
   controllers: [
     AuthController,

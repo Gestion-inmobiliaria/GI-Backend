@@ -5,6 +5,8 @@ import { BaseEntity } from '../../common/entities/base.entity';
 export enum PermissionType {
   USERS = 'Usuarios',
   REALSTATE = 'Inmobiliarias',
+  COMPANY = 'Empresa',
+  BRANCH = 'Sucursales'
 }
 
 @Entity({ name: 'permission' })

@@ -68,6 +68,15 @@ export class CreateUserDto {
   })
   @IsOptional() @IsString() @IsUUID()
   sector?: string;
+
+  @ApiProperty({
+    example: 'ID',
+    type: String,
+    description: 'Id de la sucursal del usuario',
+    required: false,
+  })
+  @IsOptional() @IsString() @IsUUID()
+  branch?: string;
 }
 
 export class RegisterUserDto {
