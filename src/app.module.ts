@@ -7,6 +7,7 @@ import { ProvidersModule } from './providers/providers.module';
 import { CommonModule } from './common/common.module';
 import { SeederModule } from './seeder/seed.module';
 import { UsersModule } from './users/users.module';
+import { InmobiliariasModule } from './inmobiliarias/inmobiliarias.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from './users/users.module';
     
     UsersModule,
     SeederModule,
+    InmobiliariasModule,          
   ]
 })
 export class AppModule { }
