@@ -43,7 +43,7 @@
     "axios": "^1.5.0",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.0",
+    "class-validator": "^0.14.1",
     "DOCKER_IMAGE": "file:",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
@@ -57,7 +57,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
-    "typeorm-naming-strategies": "^4.1.0"
+    "typeorm-naming-strategies": "^4.1.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
