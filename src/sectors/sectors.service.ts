@@ -1,13 +1,15 @@
 import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { QueryDto } from 'src/common/dto/query.dto';
+import { SectorEntity } from './entities/sector.entity';
 import { CreateSectorDto } from './dto/create-sector.dto';
 import { UpdateSectorDto } from './dto/update-sector.dto';
-import { SectorEntity } from './entities/sector.entity';
-import { QueryDto } from 'src/common/dto/query.dto';
-import { ResponseMessage, ResponseGet } from 'src/common/interfaces';
 import { handlerError } from 'src/common/utils/handlerError.utils';
+import { ResponseMessage, ResponseGet } from 'src/common/interfaces';
 import { RealStateService } from '@/realstate/services/realstate.service';
+
+
 
 @Injectable()
 export class SectorsService {

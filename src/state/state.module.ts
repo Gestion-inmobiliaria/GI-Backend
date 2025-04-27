@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CategoryController } from './controllers/category.controller';
-import { CategoryService } from './services/category.service';
-import { Category } from './entities/category.entity';
-import { ModalityController } from './controllers/modality.controller';
-import { ModalityService } from './services/modality.service';
-import { Modality } from './entities/modality.entity';
+import { StateService } from './services/state.service';
+import { StateController } from './controllers/state.controller';
+import { State } from './entities/state.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category, Modality])],
-  controllers: [CategoryController, ModalityController],
-  providers: [CategoryService, ModalityService],
+    imports: [TypeOrmModule.forFeature([State])],
+    controllers: [StateController],
+    providers: [StateService],
+    exports: [StateService],
 })
 export class StateModule {}

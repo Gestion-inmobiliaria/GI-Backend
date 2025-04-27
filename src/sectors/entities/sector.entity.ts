@@ -1,7 +1,10 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import { BaseEntity } from '@/common/entities/base.entity';
-import { RealStateEntity } from '@/realstate/entities/realstate.entity';
 import { UserEntity } from '@/users/entities/user.entity';
+import { BaseEntity } from '@/common/entities/base.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { RealStateEntity } from '@/realstate/entities/realstate.entity';
+import { State } from '@/state/entities/state.entity';
+
+
 
 @Entity({ name: 'sector' })
 export class SectorEntity extends BaseEntity {
@@ -19,4 +22,7 @@ export class SectorEntity extends BaseEntity {
 
     @OneToMany(() => UserEntity, (user) => user.sector)
     users: UserEntity[];
+
+    @OneToMany(() => State, (state) => state.sector)
+    states: State[];
 }
