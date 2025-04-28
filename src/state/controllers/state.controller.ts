@@ -1,12 +1,18 @@
 import { Request } from 'express';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { StateService } from '../services/state.service';
 import { CreateStateDto } from '../dto/create-state.dto';
 import { UpdateStateDto } from '../dto/update-state.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Req } from '@nestjs/common';
+import { PermissionGuard } from '@/users/guards/permission.guard';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, Req, UseGuards } from '@nestjs/common';
 
 
 
+@ApiTags('States')
+@UseGuards(AuthGuard, PermissionGuard)
+@ApiBearerAuth()
 @Controller('states')
 export class StateController {
     constructor(private readonly stateService: StateService) {}
@@ -39,7 +45,8 @@ export class StateController {
     @Post('upload-excel')
     @UseInterceptors(FileInterceptor('file'))
     async uploadExcel(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
-        // Asumiendo que el userId viene en el token JWT
+        // asumiendo que el userId o equivalente viene en el JWT
+        // revisar luego...
         const userId = req.user['id'];
         return this.stateService.processExcelFile(file, userId);
     }
