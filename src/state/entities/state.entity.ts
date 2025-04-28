@@ -3,8 +3,10 @@ import { BaseEntity } from '@/common/entities/base.entity';
 import { Entity, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { SectorEntity } from '../../sectors/entities/sector.entity';
 
+
+
 @Entity('states')
-export class State extends BaseEntity {
+export class StateEntity extends BaseEntity {
     @Column({ type: 'text' })
     descripcion: string;
 

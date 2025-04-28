@@ -2,7 +2,7 @@ import { RoleEntity } from './role.entity';
 import { Exclude } from 'class-transformer';
 import { IUser } from '../interfaces/user.interface';
 import { GENDER } from 'src/common/constants/gender';
-import { State } from '@/state/entities/state.entity';
+import { StateEntity } from '@/state/entities/state.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { SectorEntity } from '@/sectors/entities/sector.entity';
@@ -28,7 +28,7 @@ export class UserEntity extends BaseEntity implements IUser {
     phone: string;
 
     @Column({
-      type: 'enum', enum: GENDER, nullable: true, default: GENDER.OTHER
+        type: 'enum', enum: GENDER, nullable: true, default: GENDER.OTHER
     })
     gender: GENDER;
 
@@ -41,6 +41,6 @@ export class UserEntity extends BaseEntity implements IUser {
     @ManyToOne(() => SectorEntity, (sector) => sector.users, { onDelete: 'CASCADE', nullable: true })
     sector?: SectorEntity
 
-    @OneToMany(() => State, (state) => state.user)
-    states: State[];
+    @OneToMany(() => StateEntity, (state) => state.user)
+    states: StateEntity[];
 }

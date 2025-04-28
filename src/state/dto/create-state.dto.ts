@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsPositive, IsUUID } from 'class-validator';
+
+
 
 export class CreateStateDto {
     @IsNotEmpty()
@@ -21,10 +23,10 @@ export class CreateStateDto {
     nroHabitaciones: number;
 
     @IsNotEmpty()
-    @IsNumber()
-    sectorId: number;
+    @IsUUID()
+    sectorId: string;
 
     @IsNotEmpty()
-    @IsNumber()
-    userId: number;
-} 
+    @IsUUID()
+    userId: string;
+}

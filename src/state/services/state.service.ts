@@ -1,33 +1,33 @@
-import { Repository } from 'typeorm';
-import { State } from '../entities/state.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CreateStateDto } from '../dto/create-state.dto';
-import { UpdateStateDto } from '../dto/update-state.dto';
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { ExcelStateDto } from '../dto/excel-state.dto';
 import * as XLSX from 'xlsx';
-import { plainToClass } from 'class-transformer';
+import { Repository } from 'typeorm';
 import { validate } from 'class-validator';
+import { plainToClass } from 'class-transformer';
+import { InjectRepository } from '@nestjs/typeorm';
+import { StateEntity } from '../entities/state.entity';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { CreateStateDto, ExcelStateDto, UpdateStateDto } from '@/state/dto/index-state.dto';
+
+
 
 @Injectable()
 export class StateService {
     constructor(
-        @InjectRepository(State)
-        private readonly stateRepository: Repository<State>,
+        @InjectRepository(StateEntity)
+        private readonly stateRepository: Repository<StateEntity>,
     ) {}
 
-    async create(createStateDto: CreateStateDto): Promise<State> {
+    async create(createStateDto: CreateStateDto): Promise<StateEntity> {
         const state = this.stateRepository.create(createStateDto);
         return await this.stateRepository.save(state);
     }
 
-    async findAll(): Promise<State[]> {
+    async findAll(): Promise<StateEntity[]> {
         return await this.stateRepository.find({
             relations: ['sector', 'user'],
         });
     }
 
-    async findOne(id: number): Promise<State> {
+    async findOne(id: number): Promise<StateEntity> {
         const state = await this.stateRepository.findOne({
             where: { id: id.toString() },
             relations: ['sector', 'user'],
@@ -38,7 +38,7 @@ export class StateService {
         return state;
     }
 
-    async update(id: number, updateStateDto: UpdateStateDto): Promise<State> {
+    async update(id: number, updateStateDto: UpdateStateDto): Promise<StateEntity> {
         const state = await this.findOne(id);
         this.stateRepository.merge(state, updateStateDto);
         return await this.stateRepository.save(state);

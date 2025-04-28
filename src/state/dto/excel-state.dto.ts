@@ -1,4 +1,6 @@
-import { IsNotEmpty, IsNumber, IsString, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsPositive, IsUUID } from 'class-validator';
+
+
 
 export class ExcelStateDto {
     @IsNotEmpty()
@@ -21,6 +23,6 @@ export class ExcelStateDto {
     nroHabitaciones: number;
 
     @IsNotEmpty()
-    @IsNumber()
-    sectorId: number;
-} 
+    @IsUUID()
+    sectorId: string;
+}

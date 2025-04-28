@@ -1,8 +1,8 @@
 import { UserEntity } from '@/users/entities/user.entity';
 import { BaseEntity } from '@/common/entities/base.entity';
+import { StateEntity } from '@/state/entities/state.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { RealStateEntity } from '@/realstate/entities/realstate.entity';
-import { State } from '@/state/entities/state.entity';
 
 
 
@@ -23,6 +23,6 @@ export class SectorEntity extends BaseEntity {
     @OneToMany(() => UserEntity, (user) => user.sector)
     users: UserEntity[];
 
-    @OneToMany(() => State, (state) => state.sector)
-    states: State[];
+    @OneToMany(() => StateEntity, (state) => state.sector)
+    states: StateEntity[];
 }
