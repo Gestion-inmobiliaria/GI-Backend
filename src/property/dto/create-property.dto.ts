@@ -72,6 +72,15 @@ export class CreatePropertyDto {
  @IsOptional()
  NroEstacionamientos: number;
 
+ @ApiProperty({
+  type: 'number',
+  description: 'comision para el agente',
+  example: 15,
+ })
+ @IsNumber()
+ @IsNotEmpty()
+ comision: number;
+
  @ApiProperty({example: 'ID',type: String,description: 'Id del usuario'})
   @IsString()
   @IsUUID()
