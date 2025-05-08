@@ -71,6 +71,7 @@ import { HttpCustomService } from '@/providers/http/http.service';
     PermissionRoleService,
     RoleService,
     UserService,
+    OwnerService,
     ClientService,
     TypeOrmModule,
   ],

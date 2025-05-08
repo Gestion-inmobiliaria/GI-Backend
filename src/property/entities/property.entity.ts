@@ -1,4 +1,4 @@
-import { ImagenEntity } from './imagen.entity';
+import { ImagenEntity } from './image.entity';
 import { UbicacionEntity } from './ubicacion.entity';
 import { UserEntity } from '@/users/entities/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';

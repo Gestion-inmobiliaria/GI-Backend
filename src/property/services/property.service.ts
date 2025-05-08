@@ -93,7 +93,7 @@ export class PropertyService {
           'sector',
           'imagenes',
           'ubicacion',
-          'propertys_duenos'],
+          'property_owner'],
       });
 
       if (!property) {

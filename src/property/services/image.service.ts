@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ImagenEntity } from '@/property/entities/imagen.entity';
+import { ImagenEntity } from '@/property/entities/image.entity';
 import { CreateImageDto, UpdateImageDto } from '@/property/dto/index';
 import { PropertyService } from '@/property/services/property.service';
 

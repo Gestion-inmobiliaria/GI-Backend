@@ -25,6 +25,7 @@ export class CreateOwnerDto {
   })
   @IsNotEmpty() @IsString() @IsEmail() @MaxLength(100)
   email: string;
+  
   @ApiProperty({
     example: '12345678',
     type: String,
