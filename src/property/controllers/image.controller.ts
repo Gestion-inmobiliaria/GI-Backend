@@ -2,13 +2,14 @@ import { ORDER_ENUM } from '@/common/constants';
 import { AuthGuard } from '@/users/guards/auth.guard';
 import { CreateImageDto, UpdateImageDto } from '../dto';
 import { ImagesService } from '../services/image.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { cloudinaryStorage } from '@/config/cloudinary.config';
 import { PermissionGuard } from '@/users/guards/permission.guard';
 import { PERMISSION } from '@/users/constants/permission.constant';
 import { PermissionAccess } from '@/users/decorators/permissions.decorator';
 import { ApiTags, ApiParam, ApiBearerAuth, ApiQuery, ApiConsumes, ApiBody } from '@nestjs/swagger';
-import { Controller, Get, Post, Patch, Delete, Param, Body, ParseUUIDPipe, UseGuards, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, ParseUUIDPipe, UseGuards, UseInterceptors, 
+    UploadedFile, UploadedFiles, BadRequestException} from '@nestjs/common';
 
 
 
@@ -51,6 +52,46 @@ export class ImagesController {
         @Body('propertyId') propertyId: string,
     ) {
         return this.imagesService.uploadImage(file, propertyId);
+    }
+    
+    // @PermissionAccess(PERMISSION.IMAGE)
+    @Post('upload-multiple')
+    @UseInterceptors(FilesInterceptor('files', 10, { 
+        storage: cloudinaryStorage,
+        fileFilter: (req, file, callback) => {
+            if (!file.mimetype.match(/image\/(jpeg|png|jpg|gif)/)) {
+                return callback(new BadRequestException('Solo se permiten archivos de imagen'), false);
+            }
+            callback(null, true);
+        },
+        limits: {
+            fileSize: 5 * 1024 * 1024, // 5 megas por archivo
+        }
+    }))
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                files: {
+                    type: 'array',
+                    items: {
+                        type: 'string',
+                        format: 'binary',
+                    },
+                },
+                propertyId: {
+                    type: 'string',
+                    format: 'uuid',
+                },
+            },
+        },
+    })
+    public async uploadMultipleImages(
+        @UploadedFiles() files: Express.Multer.File[],
+        @Body('propertyId') propertyId: string,
+    ) {
+        return this.imagesService.uploadMultipleImages(files, propertyId);
     }
 
     // @PermissionAccess(PERMISSION.IMAGE, PERMISSION.IMAGE_SHOW)
