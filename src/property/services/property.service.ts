@@ -19,14 +19,14 @@ export class PropertyService {
     private readonly logger = new Logger('PropertyService');
 
     constructor(
-    @InjectRepository(PropertyEntity)
+        @InjectRepository(PropertyEntity)
         private readonly propertyRepository: Repository<PropertyEntity>,
         private readonly ubicacionService: UbicacionService,
         private readonly sectorService: SectorsService,
         private readonly userService: UserService,
         private readonly categoryService: CategoryService,
         private readonly modalityService: ModalityService,
-    ) {}
+    ) { }
 
     public async create(createPropertyDto: CreatePropertyDto): Promise<ResponseMessage> {
         try {
@@ -36,7 +36,7 @@ export class PropertyService {
             const categoryFound = await this.categoryService.findOne(category);
             const modalityFound = await this.modalityService.findOne(modality);
             const createdUbicacion = (await this.ubicacionService.create(ubicacion)).data;
-          
+
             const createProperty = this.propertyRepository.create({
                 ...property,
                 user: userFound,
@@ -45,7 +45,7 @@ export class PropertyService {
                 modality: modalityFound,
                 ubicacion: createdUbicacion,
             });
-          
+
             const createdProperty = await this.propertyRepository.save(createProperty);
             return {
                 statusCode: 201,
@@ -60,13 +60,16 @@ export class PropertyService {
         try {
             const { limit, offset, order, attr, value } = queryDto;
             const query = this.propertyRepository.createQueryBuilder('property')
-              .leftJoinAndSelect('property.sector', 'sector') 
-          
+                .leftJoinAndSelect('property.sector', 'sector')
+                .leftJoinAndSelect('property.ubicacion', 'ubicacion')
+                .leftJoinAndSelect('property.category', 'category')
+                .leftJoinAndSelect('property.modality', 'modality')
+                .leftJoinAndSelect('sector.realState', 'realState');
             if (limit) query.take(limit);
             if (offset) query.skip(offset);
             if (order) query.orderBy('property.id', order.toUpperCase() as any);
             if (attr && value) query.andWhere(`property.${attr} ILIKE :value`, { value: `%${value}%` });
-          
+
             const [data, countData] = await query.getManyAndCount();
             return {
                 data,
@@ -90,7 +93,7 @@ export class PropertyService {
                     'ubicacion',
                     'property_owner'], // esto se cambio, antes estaba 'property_owner' y daba error
             });
-          
+
             if (!property) {
                 throw new Error('Property not found');
             }
@@ -142,16 +145,16 @@ export class PropertyService {
             if (!property) {
                 throw new Error('Property not found');
             }
-          
+
             if (property.ubicacion) {
                 await this.ubicacionService.delete(property.ubicacion.id);
             }
-          
+
             const result = await this.propertyRepository.remove(property);
             if (!result) {
                 throw new Error('Property not deleted');
             }
-          
+
             return {
                 statusCode: 200,
                 message: 'Property deleted successfully'
