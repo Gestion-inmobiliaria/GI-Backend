@@ -11,7 +11,7 @@ import { PropertyModule } from './property/property.module';
 import { RealstateModule } from './realstate/realstate.module';
 import { ProvidersModule } from './providers/providers.module';
 import { ReportModule } from './reports/report.module';
-
+import { BackupModule } from './backup/backup.module';
 
 
 @Module({
@@ -27,6 +27,7 @@ import { ReportModule } from './reports/report.module';
         StateModule,
         ReportModule,
         SeederModule,
+        BackupModule,
     ]
 })
 

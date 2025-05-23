@@ -227,6 +227,48 @@ export class SeedService {
             type: PermissionType.USERS,
         });
 
+                // state o propiedades
+        const state = await this.permissionService.create({
+            name: PERMISSION.PROPERTY,
+            description: 'permite gestionar inmuebles',
+            type: PermissionType.USERS,
+        });
+        const stateShow = await this.permissionService.create({
+            name: PERMISSION.PROPERTY_SHOW,
+            description: 'permite ver inmuebles',
+            type: PermissionType.USERS,
+        });
+        const stateCreate = await this.permissionService.create({
+            name: PERMISSION.PROPERTY_CREATE,
+            description: 'permite crear inmuebles',
+            type: PermissionType.USERS,
+        });
+        const stateUpdate = await this.permissionService.create({
+            name: PERMISSION.PROPERTY_UPDATE,
+            description: 'permite actualizar inmuebles',
+            type: PermissionType.USERS,
+        });
+        const stateDelete = await this.permissionService.create({
+            name: PERMISSION.PROPERTY_DELETE,
+            description: 'permite eliminar inmuebles',
+            type: PermissionType.USERS,
+        });
+
+        // Backups
+        const backupCreate = await this.permissionService.create({
+         name: PERMISSION.BACKUP_CREATE,
+         description: 'permite crear backups',
+         type: PermissionType.USERS,
+        });
+
+        const backupRestore = await this.permissionService.create({
+         name: PERMISSION.BACKUP_RESTORE,
+         description: 'permite restaurar backups',
+         type: PermissionType.USERS,
+        });
+
+
+
         const permissionSU = [
             realstate.id,
             realstateShow.id,
@@ -234,7 +276,9 @@ export class SeedService {
             realstateUpdate.id,
             realstateDelete.id,
             log.id,
-            logShow.id
+            logShow.id,
+            backupCreate.id,
+            backupRestore.id,
         ];
 
         const permissionUser = [
@@ -268,6 +312,11 @@ export class SeedService {
             modalitiesCreate.id,
             modalitiesUpdate.id,
             modalitiesDelete.id,
+            state.id,
+            stateShow.id,
+            stateCreate.id,
+            stateUpdate.id,
+            stateDelete.id,
         ]
 
         this.administradorSU = await this.roleService.create({
