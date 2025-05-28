@@ -1,14 +1,15 @@
-import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
+import { EmailService } from './email/email.service';
+import { HttpCustomService } from './http/http.service';
 import { Global } from '@nestjs/common/decorators/modules/global.decorator';
 
-import { HttpCustomService } from './http/http.service';
-// import { EmailService } from './email/email.service';
 
 @Global()
 @Module({
-  imports: [HttpModule],
-  providers: [HttpCustomService,/**EmailService*/],
-  exports: [HttpCustomService, HttpModule, /**EmailService*/],
+    imports: [ HttpModule ],
+    providers: [ HttpCustomService , EmailService ],
+    exports: [ HttpCustomService , HttpModule, EmailService ],
 })
-export class ProvidersModule { }
+
+export class ProvidersModule {}

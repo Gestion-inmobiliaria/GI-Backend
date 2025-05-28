@@ -1,9 +1,8 @@
 import { PropertyEntity } from "./property.entity";
 import { BaseEntity } from "@/common/entities/base.entity";
-import { Column, Entity, ManyToOne, JoinColumn } from "typeorm";
+import { Column, Entity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { PaymentMethodEntity } from "@/realstate/entities/payment_method.entity";
-
-
+import { ContractSignatureEntity } from './contract-signature.entity';
 
 export enum ContractType {
     COMPRA = 'COMPRA',
@@ -19,6 +18,15 @@ export enum ContractStatus {
 export enum ContractFormat {
     PDF = 'pdf',
     HTML = 'html'
+}
+
+// NUEVO ENUM PARA ESTADO DE FIRMAS
+export enum SignatureStatus {
+    NO_REQUIRED = 'NO_REQUIRED',           // Contrato tradicional sin firmas
+    PENDING_SIGNATURES = 'PENDING_SIGNATURES',   // Esperando que ambos firmen
+    PARTIALLY_SIGNED = 'PARTIALLY_SIGNED',       // Una persona firmó
+    FULLY_SIGNED = 'FULLY_SIGNED',              // Ambas personas firmaron
+    SIGNATURE_EXPIRED = 'SIGNATURE_EXPIRED'      // Tokens expiraron
 }
 
 @Entity({ name: 'contract' })
@@ -39,6 +47,19 @@ export class ContractEntity extends BaseEntity {
         nullable: false
     })
     status: ContractStatus;
+
+    // NUEVO CAMPO PARA ESTADO DE FIRMAS
+    @Column({
+        type: 'enum',
+        enum: SignatureStatus,
+        default: SignatureStatus.NO_REQUIRED,
+        nullable: false
+    })
+    signatureStatus: SignatureStatus;
+
+    // NUEVO CAMPO PARA FECHA DE INICIO DE PROCESO DE FIRMA
+    @Column({ type: 'timestamp with time zone', nullable: true })
+    signatureStartedAt: Date;
 
     @Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
     amount: number;
@@ -91,4 +112,8 @@ export class ContractEntity extends BaseEntity {
     @ManyToOne(() => PaymentMethodEntity, { onDelete: 'CASCADE' })
     @JoinColumn()
     payment_method: PaymentMethodEntity;
+
+    // NUEVA RELACIÓN CON FIRMAS
+    @OneToMany(() => ContractSignatureEntity, (signature) => signature.contract, { cascade: true })
+    signatures: ContractSignatureEntity[];
 }

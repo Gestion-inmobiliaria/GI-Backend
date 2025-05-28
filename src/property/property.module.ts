@@ -11,13 +11,17 @@ import { ContractEntity } from './entities/contract.entity';
 import { PropertyService } from './services/property.service';
 import { UbicacionEntity } from './entities/ubicacion.entity';
 import { ContractService } from './services/contract.service';
+import { EmailService } from '@/providers/email/email.service';
 import { CloudinaryProvider } from '@/config/cloudinary.config';
 import { UbicacionService } from './services/ubicacion.service';
 import { ImagesController } from './controllers/image.controller';
 import { PropertyController } from './controllers/property.controller';
 import { ContractController } from './controllers/contract.controller';
 import { UbicacionController } from './controllers/ubicacion.controller';
+import { ContractSignatureEntity } from './entities/contract-signature.entity';
 import { PaymentMethodEntity } from '@/realstate/entities/payment_method.entity';
+import { ContractSignatureService } from './services/contract-signature.service';
+import { ContractSignatureController as StandaloneSignatureController } from './controllers/contract-signature.controller';
 
 
 @Module({
@@ -27,7 +31,8 @@ import { PaymentMethodEntity } from '@/realstate/entities/payment_method.entity'
             UbicacionEntity, 
             ImagenEntity, 
             ContractEntity,
-            PaymentMethodEntity
+            PaymentMethodEntity,
+            ContractSignatureEntity
         ]),
         UsersModule,
         SectorsModule,
@@ -38,21 +43,26 @@ import { PaymentMethodEntity } from '@/realstate/entities/payment_method.entity'
         PropertyController, 
         UbicacionController, 
         ImagesController, 
-        ContractController
+        ContractController,
+        StandaloneSignatureController
     ],
     providers: [
         PropertyService, 
         UbicacionService, 
         CloudinaryProvider, 
         ImagesService, 
-        ContractService
+        ContractService,
+        ContractSignatureService,
+        EmailService,
     ],
     exports: [
         PropertyService, 
         UbicacionService,
         TypeOrmModule, 
         ImagesService, 
-        ContractService
+        ContractService,
+        ContractSignatureService,
     ],
 })
+
 export class PropertyModule {}

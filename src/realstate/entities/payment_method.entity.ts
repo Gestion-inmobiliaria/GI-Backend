@@ -4,7 +4,6 @@ import { ContractEntity } from '@/property/entities/contract.entity';
 import { SubscriptionPaymentEntity } from './subscription_payment.entity';
 
 
-
 export enum PAYMENTMETHOD {
     cash = 'cash',
     credit_card = 'credit_card',

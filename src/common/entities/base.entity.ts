@@ -3,7 +3,6 @@ import { UpdateDateColumn } from 'typeorm/decorator/columns/UpdateDateColumn';
 import { PrimaryGeneratedColumn } from 'typeorm/decorator/columns/PrimaryGeneratedColumn';
 
 
-
 export abstract class BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;

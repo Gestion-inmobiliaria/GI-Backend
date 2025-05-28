@@ -1,8 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { ContractType, ContractStatus, ContractFormat } from '@/property/entities/contract.entity';
-import { IsString, IsNumber, IsDate, IsNotEmpty, IsEnum, IsEmail, IsOptional, IsUUID } from 'class-validator';
-
-
+import { IsString, IsNumber, IsDate, IsNotEmpty, IsEnum, IsEmail, IsOptional, IsUUID, IsBoolean } from 'class-validator';
 
 export class CreateContractDto {
     @IsNumber()
@@ -80,6 +78,44 @@ export class CreateContractDto {
     @IsNotEmpty()
     @IsUUID()
     paymentMethodId: string;
+
+    // NUEVO CAMPO: Indica si el contrato requiere firmas digitales
+    @ApiProperty({
+        description: 'Indica si el contrato requiere proceso de firma digital',
+        example: false,
+        default: false
+    })
+    @IsBoolean()
+    @IsOptional()
+    requiresSignature?: boolean;
+
+    // NUEVO CAMPO: Email del agente para firmas (si es diferente al del sistema)
+    @ApiProperty({
+        description: 'Email del agente para enviar invitación de firma (si es diferente)',
+        example: 'agente@inmobiliaria.com'
+    })
+    @IsEmail()
+    @IsOptional()
+    agentEmail?: string;
 }
 
 export class UpdateContractDto extends PartialType(CreateContractDto) {}
+
+// NUEVO DTO para crear contrato con firma
+export class CreateContractWithSignatureDto extends CreateContractDto {
+    @ApiProperty({
+        description: 'Email del cliente para enviar invitación de firma',
+        example: 'cliente@email.com'
+    })
+    @IsEmail()
+    @IsNotEmpty()
+    clientEmailForSignature: string;
+
+    @ApiProperty({
+        description: 'Email del agente para enviar invitación de firma',
+        example: 'agente@inmobiliaria.com'
+    })
+    @IsEmail()
+    @IsNotEmpty()
+    agentEmailForSignature: string;
+}

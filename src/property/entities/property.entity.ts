@@ -1,4 +1,5 @@
 import { ImagenEntity } from './imagen.entity';
+import { ContractEntity } from './contract.entity';
 import { UbicacionEntity } from './ubicacion.entity';
 import { UserEntity } from '@/users/entities/user.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
@@ -7,8 +8,6 @@ import { SectorEntity } from '@/sectors/entities/sector.entity';
 import { CategoryEntity} from '@/state/entities/category.entity';
 import { ModalityEntity } from '@/state/entities/modality.entity'; 
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne} from 'typeorm';
-import { ContractEntity } from './contract.entity';
-
 
 
 export enum EstadoProperty {
