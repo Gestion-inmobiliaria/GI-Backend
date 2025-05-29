@@ -12,13 +12,13 @@ import { Request } from 'express';
 
 
 @ApiTags('Contract Signatures')
-@Controller('contracts')
+@Controller('initiate-signatures')
 export class ContractSignatureController {
     constructor(
         private readonly contractSignatureService: ContractSignatureService
     ) {}
 
-    @Post(':id/initiate-signatures')
+    @Post(':id')
     @ApiOperation({ 
         summary: 'Iniciar proceso de firma digital para un contrato',
         description: 'Crea tokens únicos para cliente y agente, y envía invitaciones por email' 
@@ -47,12 +47,13 @@ export class ContractSignatureController {
         @Param('id') contractId: string,
         @Body() initiateDto: InitiateSignatureDto
     ) {
-        console.log("BIENVENIDO A initiate-signatures");
-        console.log('Payload recibido en POST /initiate-signatures:', InitiateSignatureDto);
+        console.log("BIENVENIDO A POST initiate-signatures");
+        console.log('Param recibido en POST /initiate-signatures:', contractId);
+        console.log('Payload recibido en POST /initiate-signatures:', initiateDto);
         return await this.contractSignatureService.initiateSignatureProcess(contractId, initiateDto);
     }
 
-    @Get(':id/signature-status')
+    @Get(':id')
     @ApiOperation({ 
         summary: 'Obtener estado de firmas de un contrato',
         description: 'Retorna el estado actual del proceso de firma digital' 

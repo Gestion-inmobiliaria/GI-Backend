@@ -21,7 +21,7 @@ import { UbicacionController } from './controllers/ubicacion.controller';
 import { ContractSignatureEntity } from './entities/contract-signature.entity';
 import { PaymentMethodEntity } from '@/realstate/entities/payment_method.entity';
 import { ContractSignatureService } from './services/contract-signature.service';
-import { ContractSignatureController as StandaloneSignatureController } from './controllers/contract-signature.controller';
+import { ContractSignatureController, SignatureController } from './controllers/contract-signature.controller';
 
 
 @Module({
@@ -44,7 +44,8 @@ import { ContractSignatureController as StandaloneSignatureController } from './
         UbicacionController, 
         ImagesController, 
         ContractController,
-        StandaloneSignatureController
+        ContractSignatureController,
+        SignatureController
     ],
     providers: [
         PropertyService, 

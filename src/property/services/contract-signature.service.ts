@@ -29,15 +29,18 @@ export class ContractSignatureService {
         }
 
         // Verificar que el contrato no esté ya en proceso de firma
-        if (contract.signature_Status !== ContractSignatureStatus.NO_REQUIRED) {
-            throw new BadRequestException('El contrato ya tiene un proceso de firma iniciado');
-        }
+        // if (contract.signature_Status !== ContractSignatureStatus.NO_REQUIRED) {
+        //     throw new BadRequestException('El contrato ya tiene un proceso de firma iniciado');
+        // }
 
         // Crear tokens únicos para cliente y agente
         const clientToken = this.generateSignatureToken();
         const agentToken = this.generateSignatureToken();
         const tokenExpiration = new Date();
         tokenExpiration.setDate(tokenExpiration.getDate() + 7); // 7 días de validez
+
+        console.log("BIENVENIDO A clientToken: " + clientToken);
+        console.log("BIENVENIDO A agentToken: " + agentToken);
 
         // Crear registros de firma para cliente
         const clientSignature = this.signatureRepository.create({
@@ -64,10 +67,14 @@ export class ContractSignatureService {
         // Guardar las firmas
         await this.signatureRepository.save([clientSignature, agentSignature]);
 
+        console.log("Firmas guardadas");
+
         // Actualizar estado del contrato
         contract.signature_Status = ContractSignatureStatus.PENDING_SIGNATURES;
         contract.signatureStartedAt = new Date();
         await this.contractRepository.save(contract);
+
+        console.log("Estado del contrato actualizado");
 
         // Enviar emails de invitación
         await this.sendSignatureInvitations(contract, clientToken, agentToken, initiateDto);
@@ -214,7 +221,7 @@ export class ContractSignatureService {
         // Reenviar email
         const email = signerType === SignerType.CLIENT ? contract.clientEmail : 
                      // Aquí necesitarías obtener el email del agente, podrías agregarlo al contrato
-                     'agente@inmobiliaria.com'; // Valor por defecto o configurable
+                     'fcabreraclaros@gmail.com'; // Valor por defecto o configurable
 
         await this.sendSignatureInvitation(
             email,
