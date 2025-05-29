@@ -4,6 +4,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CreateContractDto, UpdateContractDto, CreateContractWithSignatureDto } from '@/property/dto';
 
+
 @ApiTags('Contracts')
 @Controller('contracts')
 export class ContractController {

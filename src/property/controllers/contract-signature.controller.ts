@@ -10,6 +10,7 @@ import {
 import { SignerType } from '../entities/contract-signature.entity';
 import { Request } from 'express';
 
+
 @ApiTags('Contract Signatures')
 @Controller('contracts')
 export class ContractSignatureController {
@@ -46,6 +47,8 @@ export class ContractSignatureController {
         @Param('id') contractId: string,
         @Body() initiateDto: InitiateSignatureDto
     ) {
+        console.log("BIENVENIDO A initiate-signatures");
+        console.log('Payload recibido en POST /initiate-signatures:', InitiateSignatureDto);
         return await this.contractSignatureService.initiateSignatureProcess(contractId, initiateDto);
     }
 
@@ -180,7 +183,8 @@ export class SignatureController {
             ipAddress: ipAddress.toString(),
             userAgent
         };
-
+        console.log("BIENVENIDO A SIGN CONTRACT");
+        console.log('Payload recibido en POST /initiate-signatures:', SignContractDto);
         return await this.contractSignatureService.signContract(enhancedSignDto);
     }
 }
