@@ -64,4 +64,9 @@ export enum PERMISSION {
     // Image
     IMAGE = 'Imagen',
     IMAGE_SHOW = 'Mostrar imagenes',
+
+    // Backups
+    BACKUP_CREATE = 'Crear backups',
+    BACKUP_RESTORE = 'Restaurar backups',
+    BACKUP_VIEW = 'Ver backups',
 }

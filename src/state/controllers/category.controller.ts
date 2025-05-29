@@ -17,13 +17,15 @@ import { PermissionGuard } from '../../users/guards/permission.guard';
 import { PermissionAccess } from '../../users/decorators/permissions.decorator';
 import { PERMISSION } from '../../users/constants/permission.constant';
 import { ResponseMessage } from '@/common/interfaces';
+import { Query } from '@nestjs/common';
+import { QueryDto } from '@/common/dto/query.dto';
 
 @ApiTags('Categories')
 @ApiBearerAuth()
 @UseGuards(AuthGuard, PermissionGuard)
 @Controller('categories')
 export class CategoryController {
-  constructor(private readonly categoryService: CategoryService) {}
+  constructor(private readonly categoryService: CategoryService) { }
 
   @PermissionAccess(PERMISSION.CATEGORY, PERMISSION.CATEGORY_CREATE)
   @Post()
@@ -38,11 +40,12 @@ export class CategoryController {
 
   @PermissionAccess(PERMISSION.CATEGORY, PERMISSION.CATEGORY_SHOW)
   @Get()
-  async findAll(): Promise<ResponseMessage> {
-    const categories = await this.categoryService.findAll();
+  async findAll(@Query() query: QueryDto): Promise<ResponseMessage> {
+    const { data, countData } = await this.categoryService.findAll(query);
     return {
       statusCode: 200,
-      data: categories,
+      data,
+      countData,
     };
   }
 

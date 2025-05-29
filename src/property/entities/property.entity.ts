@@ -8,11 +8,14 @@ import { CategoryEntity} from '@/state/entities/category.entity';
 import { ModalityEntity } from '@/state/entities/modality.entity'; 
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne} from 'typeorm';
 
-
-
 export enum EstadoProperty {
     DISPONIBLE = 'disponible',
+    RESERVADO= 'reservado',
+    VENDIDO = 'vendido',
+    ALQUILADO = 'alquilado',
+    ANTICRETADO= 'anticretado',
     OCUPADO= 'ocupado',
+
 }
 
 @Entity({ name: 'property' })
@@ -29,14 +32,21 @@ export class PropertyEntity extends BaseEntity {
     @Column({type:'decimal', nullable: false})
     area:number;
 
-    @Column({type:'int', nullable: true})
+    @Column({type:'int', nullable: false})
     NroHabitaciones:number;
 
-    @Column({type:'int', nullable: true})
+    @Column({type:'int', nullable: false})
     NroBanos:number;
     
-    @Column({ type: 'int',nullable: true})
-    NroEstacionamientos:number;
+    @Column({ type: 'int',nullable: false})
+    NroEstacionamientos:number;    
+
+     @Column({ type: 'decimal', nullable: false, default: '0.0' })
+    comision:number;
+
+    @Column({ type: 'text', nullable: false,  default: 'Sin condiciones especiales.'  })
+    condicion_Compra: string;
+
 
     // RELACIONES:
      

@@ -6,7 +6,7 @@ import { BaseEntity } from 'src/common/entities/base.entity';
 
 @Entity({ name: 'imagen' })
 export class ImagenEntity extends BaseEntity {
-    @Column({ type: 'text', nullable: false })
+    @Column({ type: 'text', nullable: true })
     url: string;
 
     @ManyToOne(() => PropertyEntity, (property) => property.imagenes)
