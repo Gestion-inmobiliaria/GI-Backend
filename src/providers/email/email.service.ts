@@ -7,19 +7,18 @@ import { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
 
 @Injectable()
 export class EmailService {
+    private transporter;
     private email: string;
-    private transportes: nodemailer.Transporter<SentMessageInfo>;
 
     constructor() {
-        if (!process.env.MAILER_EMAIL || !process.env.MAILER_SECRET_KEY) {
-            throw new Error('MAILER_EMAIL and MAILER_PASSWORD environment variables are required');
-        }
-        this.email = process.env.MAILER_EMAIL
-        this.transportes = nodemailer.createTransport({
-            service: process.env.MAILER_SERVICE,
+        this.email = process.env.EMAIL_USER || '';
+        this.transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
             auth: {
-                user: this.email,
-                pass: process.env.MAILER_SECRET_KEY
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASSWORD
             }
         });
     }
@@ -27,7 +26,7 @@ export class EmailService {
     public async sendEmail(options: SendMailOptions): Promise<boolean> {
         const { to, subject, html, attachments } = options;
         try {
-            await this.transportes.sendMail({
+            await this.transporter.sendMail({
                 from: this.email,
                 to,
                 subject,
