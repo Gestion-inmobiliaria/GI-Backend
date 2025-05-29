@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from '@/providers/email/email.service';
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
-import { ContractEntity, SignatureStatus as ContractSignatureStatus } from '../entities/contract.entity';
+import { ContractEntity, Signature_Status as ContractSignatureStatus } from '../entities/contract.entity';
 import { ContractSignatureEntity, SignerType, SignatureStatus } from '../entities/contract-signature.entity';
 import { InitiateSignatureDto, SignContractDto, SignatureStatusResponseDto } from '../dto/contract-signature.dto';
 
@@ -29,7 +29,7 @@ export class ContractSignatureService {
         }
 
         // Verificar que el contrato no esté ya en proceso de firma
-        if (contract.signatureStatus !== ContractSignatureStatus.NO_REQUIRED) {
+        if (contract.signature_Status !== ContractSignatureStatus.NO_REQUIRED) {
             throw new BadRequestException('El contrato ya tiene un proceso de firma iniciado');
         }
 
@@ -65,7 +65,7 @@ export class ContractSignatureService {
         await this.signatureRepository.save([clientSignature, agentSignature]);
 
         // Actualizar estado del contrato
-        contract.signatureStatus = ContractSignatureStatus.PENDING_SIGNATURES;
+        contract.signature_Status = ContractSignatureStatus.PENDING_SIGNATURES;
         contract.signatureStartedAt = new Date();
         await this.contractRepository.save(contract);
 
@@ -181,9 +181,9 @@ export class ContractSignatureService {
         }));
 
         return {
-            signatureStatus: contract.signatureStatus,
+            signatureStatus: contract.signature_Status,
             signatures,
-            isFullySigned: contract.signatureStatus === ContractSignatureStatus.FULLY_SIGNED,
+            isFullySigned: contract.signature_Status === ContractSignatureStatus.FULLY_SIGNED,
             signatureStartedAt: contract.signatureStartedAt
         };
     }
@@ -249,7 +249,7 @@ export class ContractSignatureService {
             newStatus = ContractSignatureStatus.FULLY_SIGNED;
         }
 
-        contract.signatureStatus = newStatus;
+        contract.signature_Status = newStatus;
         await this.contractRepository.save(contract);
 
         return newStatus;

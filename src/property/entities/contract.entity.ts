@@ -1,8 +1,9 @@
 import { PropertyEntity } from "./property.entity";
 import { BaseEntity } from "@/common/entities/base.entity";
+import { ContractSignatureEntity } from './contract-signature.entity';
 import { Column, Entity, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 import { PaymentMethodEntity } from "@/realstate/entities/payment_method.entity";
-import { ContractSignatureEntity } from './contract-signature.entity';
+
 
 export enum ContractType {
     COMPRA = 'COMPRA',
@@ -21,7 +22,7 @@ export enum ContractFormat {
 }
 
 // NUEVO ENUM PARA ESTADO DE FIRMAS
-export enum SignatureStatus {
+export enum Signature_Status {
     NO_REQUIRED = 'NO_REQUIRED',           // Contrato tradicional sin firmas
     PENDING_SIGNATURES = 'PENDING_SIGNATURES',   // Esperando que ambos firmen
     PARTIALLY_SIGNED = 'PARTIALLY_SIGNED',       // Una persona firmó
@@ -51,11 +52,11 @@ export class ContractEntity extends BaseEntity {
     // NUEVO CAMPO PARA ESTADO DE FIRMAS
     @Column({
         type: 'enum',
-        enum: SignatureStatus,
-        default: SignatureStatus.NO_REQUIRED,
-        nullable: false
+        enum: Signature_Status,
+        default: Signature_Status.PENDING_SIGNATURES,
+        nullable: true
     })
-    signatureStatus: SignatureStatus;
+    signature_Status: Signature_Status;
 
     // NUEVO CAMPO PARA FECHA DE INICIO DE PROCESO DE FIRMA
     @Column({ type: 'timestamp with time zone', nullable: true })

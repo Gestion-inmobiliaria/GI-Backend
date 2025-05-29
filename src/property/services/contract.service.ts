@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { PropertyEntity } from '../entities/property.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ContractSignatureService } from './contract-signature.service';
-import { ContractEntity, SignatureStatus } from '../entities/contract.entity';
+import { ContractEntity, Signature_Status } from '../entities/contract.entity';
 import { PaymentMethodEntity } from '@/realstate/entities/payment_method.entity';
 import { CreateContractDto, UpdateContractDto, CreateContractWithSignatureDto } from '@/property/dto';
 
@@ -36,12 +36,12 @@ export class ContractService {
 
         const contract = this.contractRepository.create({
             ...createContractDto,
-            property,
+            property: property,
             payment_method: paymentMethod,
             // Establecer estado de firma según si se requiere o no
-            signatureStatus: createContractDto.requiresSignature ? 
-                            SignatureStatus.NO_REQUIRED : 
-                            SignatureStatus.NO_REQUIRED
+            signature_Status: createContractDto.requiresSignature ? 
+                            Signature_Status.NO_REQUIRED : 
+                            Signature_Status.NO_REQUIRED
         });
 
         return await this.contractRepository.save(contract);
@@ -142,9 +142,9 @@ export class ContractService {
     }
 
     // NUEVO MÉTODO: Obtener contratos por estado de firma
-    async findBySignatureStatus(status: SignatureStatus): Promise<ContractEntity[]> {
+    async findBySignatureStatus(status: Signature_Status): Promise<ContractEntity[]> {
         return await this.contractRepository.find({
-            where: { signatureStatus: status },
+            where: { signature_Status: status },
             relations: ['property', 'payment_method', 'signatures'],
         });
     }
@@ -160,19 +160,19 @@ export class ContractService {
     }> {
         const total = await this.contractRepository.count();
         const noSignatureRequired = await this.contractRepository.count({
-            where: { signatureStatus: SignatureStatus.NO_REQUIRED }
+            where: { signature_Status: Signature_Status.NO_REQUIRED }
         });
         const pendingSignatures = await this.contractRepository.count({
-            where: { signatureStatus: SignatureStatus.PENDING_SIGNATURES }
+            where: { signature_Status: Signature_Status.PENDING_SIGNATURES }
         });
         const partiallySigned = await this.contractRepository.count({
-            where: { signatureStatus: SignatureStatus.PARTIALLY_SIGNED }
+            where: { signature_Status: Signature_Status.PARTIALLY_SIGNED }
         });
         const fullySigned = await this.contractRepository.count({
-            where: { signatureStatus: SignatureStatus.FULLY_SIGNED }
+            where: { signature_Status: Signature_Status.FULLY_SIGNED }
         });
         const expired = await this.contractRepository.count({
-            where: { signatureStatus: SignatureStatus.SIGNATURE_EXPIRED }
+            where: { signature_Status: Signature_Status.SIGNATURE_EXPIRED }
         });
 
         return {

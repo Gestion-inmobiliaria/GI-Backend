@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
-import { BaseEntity } from '@/common/entities/base.entity';
 import { ContractEntity } from './contract.entity';
+import { BaseEntity } from '@/common/entities/base.entity';
+import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+
 
 export enum SignerType {
     CLIENT = 'CLIENT',

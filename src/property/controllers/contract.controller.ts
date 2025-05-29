@@ -1,5 +1,5 @@
 import { ContractService } from '../services/contract.service';
-import { ContractEntity, SignatureStatus } from '../entities/contract.entity';
+import { ContractEntity, Signature_Status } from '../entities/contract.entity';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { CreateContractDto, UpdateContractDto, CreateContractWithSignatureDto } from '@/property/dto';
@@ -69,7 +69,7 @@ export class ContractController {
     @ApiQuery({ 
         name: 'signatureStatus', 
         required: false, 
-        enum: SignatureStatus,
+        enum: Signature_Status,
         description: 'Filtrar contratos por estado de firma' 
     })
     @ApiResponse({ 
@@ -77,7 +77,7 @@ export class ContractController {
         description: 'Lista de contratos obtenida exitosamente',
         type: [ContractEntity] 
     })
-    async findAll(@Query('signatureStatus') signatureStatus?: SignatureStatus): Promise<ContractEntity[]> {
+    async findAll(@Query('signatureStatus') signatureStatus?: Signature_Status): Promise<ContractEntity[]> {
         if (signatureStatus) {
             return this.contractService.findBySignatureStatus(signatureStatus);
         }
