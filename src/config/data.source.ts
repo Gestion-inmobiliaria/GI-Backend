@@ -21,7 +21,7 @@ export const DataSourceConfig: DataSourceOptions = {
     namingStrategy: new SnakeNamingStrategy(),
     logging: false,
 
- /*   extra: {
+   /* extra: {
         ssl: configService.get('APP_PROD') === 'true' ? { rejectUnauthorized: false } : { rejectUnauthorized: false }
     }*/
 };

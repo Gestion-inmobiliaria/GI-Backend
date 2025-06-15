@@ -6,6 +6,7 @@ import { IUser } from '../interfaces/user.interface';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { SectorEntity } from '@/sectors/entities/sector.entity';
 import { PropertyEntity } from '@/property/entities/property.entity';
+import { ImpulsarProperty } from '@/impulsar_property/entities/impulsar_property.entity';
 
 
 
@@ -43,4 +44,7 @@ export class UserEntity extends BaseEntity implements IUser {
 
     @OneToMany(() => PropertyEntity, (property) => property.user)
     propertys: PropertyEntity[];
+
+    @OneToMany(() => ImpulsarProperty, (impulsarProperty) => impulsarProperty.user)
+    impulsos: ImpulsarProperty[];
 }

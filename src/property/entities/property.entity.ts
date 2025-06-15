@@ -8,6 +8,7 @@ import { CategoryEntity} from '@/state/entities/category.entity';
 import { ModalityEntity } from '@/state/entities/modality.entity'; 
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne} from 'typeorm';
 import { ContractEntity } from './contract.entity';
+import { ImpulsarProperty } from '@/impulsar_property/entities/impulsar_property.entity';
 
 export enum EstadoProperty {
 
@@ -74,4 +75,7 @@ export class PropertyEntity extends BaseEntity {
 
     @OneToMany(() => ContractEntity, (contract) => contract.property)
     contracts: ContractEntity[];
+
+    @OneToMany( ()=>ImpulsarProperty, (impulsarProperty) => impulsarProperty.property, { onDelete: 'CASCADE' })
+    impulsos: ImpulsarProperty[];
 }
