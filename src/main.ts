@@ -3,14 +3,13 @@ import { AppModule } from './app.module';
 import * as bodyParser from 'body-parser';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { DocumentBuilder } from '@nestjs/swagger';
 import { CORS_OPTIONS } from './common/constants';
+import { DocumentBuilder } from '@nestjs/swagger';
 import { SwaggerModule } from '@nestjs/swagger/dist';
 import { LogsService } from './common/logs/logs.service';
 import { UserService } from './users/services/users.service';
 import { LoggingInterceptor } from './common/logs/logs.interceptor';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
-
 
 
 async function bootstrap() {
@@ -54,7 +53,7 @@ async function bootstrap() {
     SwaggerModule.setup('docs', app, document);
     // }
 
-    await app.listen(3000, '0.0.0.0'); //abre puerto para la app
+    await app.listen(3000, '0.0.0.0');          // abre puerto para la app
     console.log(`Application is running on: ${url}`);
 }
 

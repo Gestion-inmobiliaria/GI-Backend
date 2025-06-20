@@ -1,17 +1,18 @@
 import { ImagenEntity } from './imagen.entity';
+import { ContractEntity } from './contract.entity';
 import { UbicacionEntity } from './ubicacion.entity';
 import { UserEntity } from '@/users/entities/user.entity';
+import { VisitEntity } from '@/users/entities/index.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
 import { PropertyOwnerEntity } from './property_owner.entity';
 import { SectorEntity } from '@/sectors/entities/sector.entity';
 import { CategoryEntity} from '@/state/entities/category.entity';
 import { ModalityEntity } from '@/state/entities/modality.entity'; 
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne} from 'typeorm';
-import { ContractEntity } from './contract.entity';
 import { ImpulsarProperty } from '@/impulsar_property/entities/impulsar_property.entity';
 
-export enum EstadoProperty {
 
+export enum EstadoProperty {
     DISPONIBLE = 'disponible',
     RESERVADO= 'reservado',
     VENDIDO = 'vendido',
@@ -49,8 +50,8 @@ export class PropertyEntity extends BaseEntity {
     @Column({ type: 'text', nullable: false,  default: 'Sin condiciones especiales.'  })
     condicion_Compra: string;
 
-
     // RELACIONES:
+    
     @ManyToOne( ()=>UserEntity, (user) => user.propertys,{onDelete: 'CASCADE', nullable: true})
     user: UserEntity;
   
@@ -78,4 +79,7 @@ export class PropertyEntity extends BaseEntity {
 
     @OneToMany( ()=>ImpulsarProperty, (impulsarProperty) => impulsarProperty.property, { onDelete: 'CASCADE' })
     impulsos: ImpulsarProperty[];
+
+    @OneToMany(() => VisitEntity, (visit) => visit.property)
+    visits: VisitEntity[];
 }

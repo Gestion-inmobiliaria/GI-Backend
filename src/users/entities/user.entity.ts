@@ -1,13 +1,13 @@
 import { RoleEntity } from './role.entity';
 import { Exclude } from 'class-transformer';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { GENDER } from 'src/common/constants/gender';
 import { IUser } from '../interfaces/user.interface';
+import { VisitEntity } from '@/users/entities/index.entity';
 import { BaseEntity } from 'src/common/entities/base.entity';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { SectorEntity } from '@/sectors/entities/sector.entity';
 import { PropertyEntity } from '@/property/entities/property.entity';
 import { ImpulsarProperty } from '@/impulsar_property/entities/impulsar_property.entity';
-
 
 
 @Entity({ name: 'user' })
@@ -47,4 +47,7 @@ export class UserEntity extends BaseEntity implements IUser {
 
     @OneToMany(() => ImpulsarProperty, (impulsarProperty) => impulsarProperty.user)
     impulsos: ImpulsarProperty[];
+
+    @OneToMany(() => VisitEntity, (visit) => visit.user)
+    visits: VisitEntity[];
 }
