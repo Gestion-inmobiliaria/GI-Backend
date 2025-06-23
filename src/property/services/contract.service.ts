@@ -7,8 +7,10 @@ import { CreateContractDto, UpdateContractDto } from '@/property/dto';
 import { PaymentMethodEntity, PAYMENTMETHOD } from '@/realstate/entities/payment_method.entity';
 import { PaymentStripeService } from '@/realstate/services/payment-stripe.service';
 import { PaymentEntity, PaymentStatus } from '../entities/payment.entity';
+import { EmailService } from '@/providers/email/email.service';
 
-
+import { generatePdfFromHtml } from '@/common/utils/pdf.utils';
+import { ContractEmailService } from './contract-email.service';
 
 @Injectable()
 export class ContractService {
@@ -22,7 +24,8 @@ export class ContractService {
         @InjectRepository(PaymentEntity)
         private readonly paymentRepository: Repository<PaymentEntity>,
         private readonly paymentStripeService: PaymentStripeService,
-    ) {}
+        private readonly contractEmailService: ContractEmailService,
+    ) { }
 
     async create(createContractDto: CreateContractDto): Promise<ContractEntity> {
         const property = await this.propertyRepository.findOne({ where: { id: String(createContractDto.propertyId) } });
@@ -47,6 +50,15 @@ export class ContractService {
         // Actualizar estado de la propiedad según el tipo de contrato
         await this.updatePropertyState(property, createContractDto.type);
 
+        if (createContractDto.clientEmail) {
+            const pdfBuffer = await generatePdfFromHtml(createContractDto.contractContent);
+            await this.contractEmailService.sendContractEmail({
+                to: createContractDto.clientEmail,
+                clientName: createContractDto.clientName,
+                pdfBuffer,
+            });
+        }
+        
         return savedContract;
     }
 
@@ -144,7 +156,7 @@ export class ContractService {
         }
 
         const isConfirmed = await this.paymentStripeService.confirmPayment(paymentIntentId);
-        
+
         if (isConfirmed) {
             payment.status = PaymentStatus.SUCCEEDED;
             payment.paidAt = new Date();

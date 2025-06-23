@@ -12,6 +12,7 @@ import { PlanController } from './controllers/plan.controller';
 import { PlanService } from './services/plan.service';
 import { SubscriptionService } from './services/subscription.service';
 import { PaymentMethodService } from './services/payment_method.service';
+import { PaymentMethodController } from './controllers/payment_method.controller';
 // import { UsersModule } from '@/users/users.module';
 
 @Module({
@@ -28,7 +29,8 @@ import { PaymentMethodService } from './services/payment_method.service';
   ],
   controllers: [
     PlanController,
-    RealStateController
+    RealStateController,
+    PaymentMethodController,
   ],
   providers: [
     RealStateService, PlanService, SubscriptionService, PaymentMethodService

@@ -21,7 +21,7 @@ import { ContractController } from './controllers/contract.controller';
 import { UbicacionController } from './controllers/ubicacion.controller';
 import { PaymentMethodEntity } from '@/realstate/entities/payment_method.entity';
 import { PaymentStripeService } from '@/realstate/services/payment-stripe.service';
-
+import { ContractEmailService } from './services/contract-email.service';
 
 @Module({
     imports: [
@@ -51,14 +51,16 @@ import { PaymentStripeService } from '@/realstate/services/payment-stripe.servic
         CloudinaryProvider, 
         ImagesService, 
         ContractService,
-        PaymentStripeService
+        PaymentStripeService,
+        ContractEmailService
     ],
     exports: [
         PropertyService, 
         UbicacionService,
         TypeOrmModule, 
         ImagesService, 
-        ContractService
+        ContractService,
+        ContractEmailService,
     ],
 })
 export class PropertyModule {}
