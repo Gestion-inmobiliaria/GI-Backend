@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {StateModule} from './state/state.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { EmailModule } from './email/email.module';
 import { UsersModule } from './users/users.module';
 import { SeederModule } from './seeder/seed.module';
 import { BackupModule } from './backup/backup.module';
@@ -32,6 +33,7 @@ import { ImpulsarPropertyModule } from './impulsar_property/impulsar_property.mo
         SeederModule,
         BackupModule,
         ImpulsarPropertyModule,
+        EmailModule,
     ]
 })
 
