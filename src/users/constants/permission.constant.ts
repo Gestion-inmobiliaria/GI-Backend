@@ -65,8 +65,17 @@ export enum PERMISSION {
     IMAGE = 'Imagen',
     IMAGE_SHOW = 'Mostrar imagenes',
 
-    // Backups
+
+    // Contract
+    CONTRACT = 'Contrato',
+    CONTRACT_SHOW = 'Mostrar contratos',
+    CONTRACT_CREATE = 'Crear contratos',
+    CONTRACT_UPDATE = 'Actualizar contratos',
+    CONTRACT_DELETE = 'Eliminar contratos',
+  
+      // Backups
     BACKUP_CREATE = 'Crear backups',
     BACKUP_RESTORE = 'Restaurar backups',
     BACKUP_VIEW = 'Ver backups',
 }
+

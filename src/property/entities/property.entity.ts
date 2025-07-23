@@ -7,15 +7,17 @@ import { SectorEntity } from '@/sectors/entities/sector.entity';
 import { CategoryEntity} from '@/state/entities/category.entity';
 import { ModalityEntity } from '@/state/entities/modality.entity'; 
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne} from 'typeorm';
+import { ContractEntity } from './contract.entity';
+import { ImpulsarProperty } from '@/impulsar_property/entities/impulsar_property.entity';
 
 export enum EstadoProperty {
+
     DISPONIBLE = 'disponible',
     RESERVADO= 'reservado',
     VENDIDO = 'vendido',
     ALQUILADO = 'alquilado',
     ANTICRETADO= 'anticretado',
     OCUPADO= 'ocupado',
-
 }
 
 @Entity({ name: 'property' })
@@ -49,7 +51,6 @@ export class PropertyEntity extends BaseEntity {
 
 
     // RELACIONES:
-     
     @ManyToOne( ()=>UserEntity, (user) => user.propertys,{onDelete: 'CASCADE', nullable: true})
     user: UserEntity;
   
@@ -71,4 +72,10 @@ export class PropertyEntity extends BaseEntity {
     
     @OneToMany(()=>PropertyOwnerEntity,(property_owner)=> property_owner.property,{onDelete: 'CASCADE'})
     property_owner: PropertyOwnerEntity[];
+
+    @OneToMany(() => ContractEntity, (contract) => contract.property)
+    contracts: ContractEntity[];
+
+    @OneToMany( ()=>ImpulsarProperty, (impulsarProperty) => impulsarProperty.property, { onDelete: 'CASCADE' })
+    impulsos: ImpulsarProperty[];
 }

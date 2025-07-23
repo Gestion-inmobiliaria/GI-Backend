@@ -11,6 +11,8 @@ import { LogsService } from './logs.service';
 import { Request } from 'express';
 import { UserService } from '@/users/services/users.service';
 
+
+
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger('LoggingInterceptor');
@@ -152,4 +154,4 @@ export class LoggingInterceptor implements NestInterceptor {
     
     return sanitized;
   }
-} 
+}

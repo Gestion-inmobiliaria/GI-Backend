@@ -1,3 +1,5 @@
+export * from './contract.dto';
+
 export * from './create-image.dto';
 export * from './update-image.dto';
 
@@ -11,3 +13,5 @@ export * from './create-ubicacion.dto';
 export * from './update-ubicacion.dto';
 
 export * from './upload-image.dto';
+
+export * from './favorite.dto';

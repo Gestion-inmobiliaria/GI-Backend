@@ -17,13 +17,13 @@ export const DataSourceConfig: DataSourceOptions = {
     database: configService.get('DB_DATABASE'),
     entities: [__dirname + '/../**/**/*.entity{.ts,.js}'],
     migrations: [__dirname + '/../migrations/*{.ts,.js}'],
-     synchronize: true,
+    synchronize: true,
     namingStrategy: new SnakeNamingStrategy(),
     logging: false,
 
- /*   extra: {
+   extra: {
         ssl: configService.get('APP_PROD') === 'true' ? { rejectUnauthorized: false } : { rejectUnauthorized: false }
-    }*/
+    }
 };
 
 export const AppDS = new DataSource(DataSourceConfig);
